@@ -54,7 +54,7 @@ col1, col2, col3, col4, col5 = st.columns(5)
 with col1:
     st.metric("Total Calgary Stores", "196")
 with col2:
-    st.metric("Avg Rating", f"{enriched['rating'].mean():.2f} ⭐")
+    st.metric("Avg Rating", f"{enriched['rating'].mean():.2f} stars")
 with col3:
     st.metric("Operational", len(enriched[enriched['business_status'] == 'OPERATIONAL']))
 with col4:
