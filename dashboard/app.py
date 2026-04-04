@@ -49,10 +49,12 @@ def load_data():
 
 # Top metrics
 st.markdown("---")
+enriched, saturation, calgary = load_data()
+
 col1, col2, col3, col4, col5 = st.columns(5)
 
 with col1:
-    st.metric("Total Calgary Stores", "196")
+    st.metric("Total Calgary Stores", len(enriched))
 with col2:
     st.metric("Avg Rating", f"{enriched['rating'].mean():.2f} stars")
 with col3:
