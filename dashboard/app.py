@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-import os
+
 
 # Page config
 st.set_page_config(
@@ -41,12 +41,11 @@ st.markdown('<p class="sub-header">Cannabis Market Intelligence Platform — Cal
 # Load data
 @st.cache_data
 def load_data():
-    base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    enriched = pd.read_csv(os.path.join(base_path, "data", "calgary_enriched.csv"))
-    saturation = pd.read_csv(os.path.join(base_path, "data", "calgary_saturation_report.csv"))
-    alberta = pd.read_csv(os.path.join(base_path, "data", "alberta_stores.csv"))
-
-enriched, saturation, calgary = load_data()
+    enriched = pd.read_csv("data/calgary_enriched.csv")
+    saturation = pd.read_csv("data/calgary_saturation_report.csv")
+    alberta = pd.read_csv("data/alberta_stores.csv")
+    calgary = alberta[alberta["Site City Name"] == "CALGARY"].copy()
+    return enriched, saturation, calgary
 
 # Top metrics
 st.markdown("---")
