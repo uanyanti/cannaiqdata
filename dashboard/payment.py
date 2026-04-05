@@ -76,20 +76,34 @@ def show_payment_page():
             else:
                 try:
                     # Create Stripe checkout session
-                    session = stripe.checkout.Session.create(
-                        payment_method_types=["card"],
-                        line_items=[{
-                            "price": PRICE_ID,
-                            "quantity": 1
-                        }],
-                        mode="subscription",
-                        customer_email=email,
-                        success_url="https://cannaiqdata.streamlit.app?subscribed=true",
-                        cancel_url="https://cannaiqdata.streamlit.app?cancelled=true",
-                    )
-                    st.markdown(f'<meta http-equiv="refresh" content="0;url={session.url}">', unsafe_allow_html=True)
-                    st.success("Redirecting to secure payment...")
-                    st.markdown(f"[Click here if not redirected]({session.url})")
+                   session = stripe.checkout.Session.create(
+    payment_method_types=["card"],
+    line_items=[{
+        "price": PRICE_ID,
+        "quantity": 1
+    }],
+    mode="subscription",
+    customer_email=email,
+    success_url="https://cannaiqdata.streamlit.app?subscribed=true",
+    cancel_url="https://cannaiqdata.streamlit.app?cancelled=true",
+)
+st.success("Your secure checkout is ready!")
+st.markdown(f"""
+<a href="{session.url}" target="_blank" style="
+    display:block;
+    background:#2E7D32;
+    color:white;
+    padding:15px;
+    text-align:center;
+    border-radius:10px;
+    font-size:18px;
+    font-weight:bold;
+    text-decoration:none;
+    margin-top:10px;
+">
+    🔒 Click Here To Complete Payment
+</a>
+""", unsafe_allow_html=True)
                 except Exception as e:
                     st.error(f"Payment error: {e}")
 
