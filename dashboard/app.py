@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+from payment import show_payment_page
 
 # Page config
 st.set_page_config(
@@ -267,4 +268,11 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown("---")
+# Payment section
+st.markdown("---")
+if st.button("🔒 Get Full Access — Join CannaIQ Beta", use_container_width=True):
+    st.session_state.show_payment = True
+
+if st.session_state.get("show_payment"):
+    show_payment_page()
 st.markdown("<p style='text-align:center;color:#555'>CannaIQ — Cannabis Market Intelligence for Canada | Calgary Beta v1.0</p>", unsafe_allow_html=True)

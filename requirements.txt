@@ -6,3 +6,4 @@ beautifulsoup4
 openpyxl
 xlrd
 python-dotenv
+stripe
