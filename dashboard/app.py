@@ -105,22 +105,23 @@ st.markdown('<p class="sub-header">Cannabis Market Intelligence — Calgary, Alb
 # Why This Matters
 st.markdown("""
 <div class="why-matters">
-    💡 <strong>Wrong location can cost $200,000+</strong> — CannaIQ tells you exactly where to open, where to avoid, and what's coming next.
+    🚨 <strong>Avoid costly mistakes</strong> — CannaIQ tells you exactly where to open and where to stay away.
 </div>
 """, unsafe_allow_html=True)
 
 st.markdown("---")
 
 # Decision Banners
-st.subheader("🎯 Top Decisions Right Now")
+st.subheader("🎯 What You Should Do Right Now")
 col_yes, col_no = st.columns(2)
 
 with col_yes:
     st.markdown("""
     <div class="decision-banner-green">
         ✅ BEST AREA TO OPEN<br>
-        <span style="font-size:28px">Downtown Calgary</span><br>
-        <span style="font-size:14px">Lowest competition · Highest opportunity score</span>
+<span style="font-size:28px">Downtown Calgary</span><br>
+<span style="font-size:14px">Lowest competition in the city right now</span><br>
+<span style="font-size:13px; background:#2E7D32; padding:3px 8px; border-radius:10px">#1 Opportunity in Calgary</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -128,35 +129,44 @@ with col_no:
     st.markdown("""
     <div class="decision-banner-red">
         ⚠️ AVOID THESE AREAS<br>
-        <span style="font-size:28px">SW & SE Calgary</span><br>
-        <span style="font-size:14px">Fully saturated · Lowest opportunity score</span>
+<span style="font-size:28px">SW & SE Calgary</span><br>
+<span style="font-size:14px">Highest store density → hardest to compete</span>
     </div>
     """, unsafe_allow_html=True)
 
 st.markdown("---")
 
 # Key Metrics — action oriented
-st.subheader("📊 Market Snapshot")
-col1, col2, col3, col4 = st.columns(4)
+st.subheader("📊 Market Risk Overview")
 
-total = len(enriched)
+col1, col2, col3 = st.columns(3)
+
 operational = len(enriched[enriched['business_status'] == 'OPERATIONAL'])
 closed = len(enriched[enriched['business_status'] == 'CLOSED_PERMANENTLY'])
 high_comp = len(enriched[enriched['review_count'] > 200])
 
+# Calculate new stores last 6 months
+calgary['Initial Effective Date'] = pd.to_datetime(calgary['Initial Effective Date'], errors='coerce')
+six_months_ago = pd.Timestamp.now() - pd.DateOffset(months=6)
+new_stores = len(calgary[calgary['Initial Effective Date'] >= six_months_ago])
+
 with col1:
-    st.metric("Total Active Stores", operational, help="Operational cannabis stores in Calgary")
+    st.metric("Total Active Stores", operational)
 with col2:
-    st.metric("Recently Closed", closed, delta="-1", delta_color="inverse")
-with col3:
     st.metric("High Competition Stores", high_comp, help="Stores with 200+ reviews — dominant players")
-with col4:
-    avg_reviews = int(enriched['review_count'].mean())
-    st.metric("Avg Reviews Per Store", avg_reviews, help="Market engagement benchmark")
+with col3:
+    st.metric("New Stores (Last 6 Months)", new_stores, help="Market growth signal")
 
 st.markdown("---")
 
 # Charts
+st.markdown("---")
+st.markdown("""
+<div class="insight-box" style="text-align:center; font-size:17px; margin-bottom:15px">
+    💰 <strong>These scores show where you're most likely to win or lose money.</strong>
+</div>
+""", unsafe_allow_html=True)
+
 left, right = st.columns(2)
 
 with left:
@@ -241,7 +251,8 @@ st.markdown("""
     <h2>🌿 Get Full CannaIQ Intelligence</h2>
     <p style="font-size:18px">Store-level alerts · Neighbourhood forecasts · Competitor tracking · Canada-wide data</p>
     <p style="font-size:22px; font-weight:bold">Join CannaIQ Beta — Early Access Now Open</p>
-    <p style="font-size:15px">Contact: hello@cannaiqdata.ca</p>
+    <p style="font-size:20px; font-weight:bold">Get real-time alerts, exact locations, and competitor tracking</p>
+<a href="mailto:hello@cannaiqdata.ca" style="background:white; color:#2E7D32; padding:12px 30px; border-radius:25px; font-weight:bold; font-size:18px; text-decoration:none">→ Join Beta Now</a>
 </div>
 """, unsafe_allow_html=True)
 
