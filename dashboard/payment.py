@@ -3,13 +3,18 @@ import stripe
 import os
 from dotenv import load_dotenv
 
-# Load .env from root folder
+# Load from Streamlit secrets or .env
 base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv(os.path.join(base, ".env"))
 
-stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
-PRICE_ID = os.getenv("STRIPE_PRICE_ID")
-PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY")
+try:
+    stripe.api_key = st.secrets["STRIPE_SECRET_KEY"]
+    PRICE_ID = st.secrets["STRIPE_PRICE_ID"]
+    PUBLISHABLE_KEY = st.secrets["STRIPE_PUBLISHABLE_KEY"]
+except:
+    stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+    PRICE_ID = os.getenv("STRIPE_PRICE_ID")
+    PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY")
 
 def show_payment_page():
     st.markdown("""
