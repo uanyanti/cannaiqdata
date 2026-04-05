@@ -100,7 +100,7 @@ enriched, saturation, calgary = load_data()
 
 # Header
 st.markdown('<p class="main-header">🌿 CannaIQ</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-header">Cannabis Market Intelligence — Calgary, Alberta | Updated Daily</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-header">Cannabis Market Intelligence — Calgary, Alberta | ⚡ Updated Daily — market conditions change fast</p>', unsafe_allow_html=True)
 
 # Why This Matters
 st.markdown("""
@@ -113,6 +113,7 @@ st.markdown("---")
 
 # Decision Banners
 st.subheader("🎯 What You Should Do Right Now")
+st.markdown('<p class="score-explain" style="font-size:15px">These recommendations are based on competition density and demand gaps.</p>', unsafe_allow_html=True)
 col_yes, col_no = st.columns(2)
 
 with col_yes:
@@ -121,7 +122,8 @@ with col_yes:
         ✅ BEST AREA TO OPEN<br>
 <span style="font-size:28px">Downtown Calgary</span><br>
 <span style="font-size:14px">Lowest competition in the city right now</span><br>
-<span style="font-size:13px; background:#2E7D32; padding:3px 8px; border-radius:10px">#1 Opportunity in Calgary</span>
+<span style="font-size:13px; background:#2E7D32; padding:3px 8px; border-radius:10px">#1 Opportunity in Calgary</span><br>
+<span style="font-size:13px; color:#90EE90">Recommended for new store entry</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -130,7 +132,8 @@ with col_no:
     <div class="decision-banner-red">
         ⚠️ AVOID THESE AREAS<br>
 <span style="font-size:28px">SW & SE Calgary</span><br>
-<span style="font-size:14px">Highest store density → hardest to compete</span>
+<span style="font-size:14px">Highest store density → hardest to compete</span><br>
+<span style="font-size:13px; color:#FFB3B3">High risk for new entrants</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -138,6 +141,13 @@ st.markdown("---")
 
 # Key Metrics — action oriented
 st.subheader("📊 Market Risk Overview")
+st.markdown("""
+<div style="text-align:center; margin-top:10px">
+    <span style="background:#333; padding:6px 16px; border-radius:20px; color:#aaa; font-size:13px">
+        📊 Confidence: Medium — based on AGLC public registry + Google Maps signals
+    </span>
+</div>
+""", unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns(3)
 
@@ -252,7 +262,7 @@ st.markdown("""
     <p style="font-size:18px">Store-level alerts · Neighbourhood forecasts · Competitor tracking · Canada-wide data</p>
     <p style="font-size:22px; font-weight:bold">Join CannaIQ Beta — Early Access Now Open</p>
     <p style="font-size:20px; font-weight:bold">Get real-time alerts, exact locations, and competitor tracking</p>
-<a href="mailto:hello@cannaiqdata.ca" style="background:white; color:#2E7D32; padding:12px 30px; border-radius:25px; font-weight:bold; font-size:18px; text-decoration:none">→ Join Beta Now</a>
+<a href="mailto:hello@cannaiqdata.ca" style="background:white; color:#2E7D32; padding:12px 30px; border-radius:25px; font-weight:bold; font-size:18px; text-decoration:none">🔒 Get exact store locations, competitor alerts & real-time updates → Join CannaIQ Beta</a>
 </div>
 """, unsafe_allow_html=True)
 
