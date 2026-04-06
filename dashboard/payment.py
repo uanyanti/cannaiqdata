@@ -9,6 +9,10 @@ load_dotenv(os.path.join(base, ".env"))
 
 # Get keys — Railway environment variables only
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY", "")
+# Debug - remove after fixing
+import streamlit as st
+st.write(f"Key loaded: {bool(stripe.api_key)}")
+st.write(f"Key starts with: {stripe.api_key[:10] if stripe.api_key else 'EMPTY'}")
 PRICE_ID = os.getenv("STRIPE_PRICE_ID", "")
 PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY", "")
 
