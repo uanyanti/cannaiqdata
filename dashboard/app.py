@@ -386,9 +386,22 @@ st.markdown("""
     <h2>🌿 Get Full CannaIQ Intelligence</h2>
     <p style="font-size:18px">Store-level alerts · Neighbourhood forecasts · Competitor tracking · Canada-wide data</p>
     <p style="font-size:22px; font-weight:bold">Join CannaIQ Beta — Early Access Now Open</p>
-    <a href="mailto:hello@cannaiqdata.ca" style="background:white; color:#2E7D32; padding:12px 30px; border-radius:25px; font-weight:bold; font-size:18px; text-decoration:none">
-        🔒 Get exact store locations, competitor alerts & real-time updates → Join CannaIQ Beta
-    </a>
+    <a href="mailto:hello@cannaiqdata.ca" style="
+    display:inline-block;
+    background:white;
+    color:#2E7D32;
+    padding:12px 24px;
+    border-radius:25px;
+    font-weight:bold;
+    font-size:16px;
+    text-decoration:none;
+    max-width:90%;
+    word-wrap:break-word;
+    text-align:center;
+    margin:0 auto;
+">
+    🔒 Join CannaIQ Beta → Early Access
+</a>
 </div>
 """, unsafe_allow_html=True)
 
