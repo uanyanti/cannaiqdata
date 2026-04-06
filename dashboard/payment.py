@@ -77,7 +77,7 @@ def show_payment_page():
                 price_id = os.environ.get("STRIPE_PRICE_ID", "")
 
                 if not secret_key:
-                    st.error("Configuration error — please contact hello@cannaiqdata.ca")
+                    st.error(f"Key missing. Env vars available: {list(os.environ.keys())[:10]}")
                 else:
                     try:
                         stripe.api_key = secret_key
