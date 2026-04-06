@@ -7,14 +7,12 @@ from dotenv import load_dotenv
 base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv(os.path.join(base, ".env"))
 
-# Get keys — Railway environment variables only
-stripe.api_key = os.getenv("STRIPE_SECRET_KEY", "")
-# Debug - remove after fixing
-import streamlit as st
-st.write(f"Key loaded: {bool(stripe.api_key)}")
-st.write(f"Key starts with: {stripe.api_key[:10] if stripe.api_key else 'EMPTY'}")
-PRICE_ID = os.getenv("STRIPE_PRICE_ID", "")
-PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY", "")
+def get_stripe_key():
+    key = os.environ.get("STRIPE_SECRET_KEY", "")
+    return key
+
+def get_price_id():
+    return os.environ.get("STRIPE_PRICE_ID", "")
 
 def show_payment_page():
     st.markdown("""
@@ -77,40 +75,47 @@ def show_payment_page():
         email = st.text_input("Your email address", placeholder="you@example.com")
 
         if st.button("Start Subscription — $199/month CAD", use_container_width=True):
-            if not email:
-                st.error("Please enter your email address")
-            else:
-                try:
-                    session = stripe.checkout.Session.create(
-                        payment_method_types=["card"],
-                        line_items=[{
-                            "price": PRICE_ID,
-                            "quantity": 1
-                        }],
-                        mode="subscription",
-                        customer_email=email,
-                        success_url="https://cannaiqdata.streamlit.app?subscribed=true",
-                        cancel_url="https://cannaiqdata.streamlit.app?cancelled=true",
-                    )
-                    st.success("Your secure checkout is ready!")
-                    st.markdown(f"""
-                    <a href="{session.url}" target="_blank" style="
-                        display:block;
-                        background:#2E7D32;
-                        color:white;
-                        padding:15px;
-                        text-align:center;
-                        border-radius:10px;
-                        font-size:18px;
-                        font-weight:bold;
-                        text-decoration:none;
-                        margin-top:10px;
-                    ">
-                        Click Here To Complete Payment
-                    </a>
-                    """, unsafe_allow_html=True)
-                except Exception as e:
-                    st.error(f"Payment error: {e}")
+    if not email:
+        st.error("Please enter your email address")
+    else:
+        secret_key = get_stripe_key()
+        price_id = get_price_id()
+        
+        if not secret_key:
+            st.error("Configuration error — please contact hello@cannaiqdata.ca")
+        else:
+            try:
+                stripe.api_key = secret_key
+                session = stripe.checkout.Session.create(
+                    payment_method_types=["card"],
+                    line_items=[{
+                        "price": price_id,
+                        "quantity": 1
+                    }],
+                    mode="subscription",
+                    customer_email=email,
+                    success_url="https://cannaiqdata.ca?subscribed=true",
+                    cancel_url="https://cannaiqdata.ca?cancelled=true",
+                )
+                st.success("Your secure checkout is ready!")
+                st.markdown(f"""
+                <a href="{session.url}" target="_blank" style="
+                    display:block;
+                    background:#2E7D32;
+                    color:white;
+                    padding:15px;
+                    text-align:center;
+                    border-radius:10px;
+                    font-size:18px;
+                    font-weight:bold;
+                    text-decoration:none;
+                    margin-top:10px;
+                ">
+                    Click Here To Complete Payment
+                </a>
+                """, unsafe_allow_html=True)
+            except Exception as e:
+                st.error(f"Payment error: {e}")
 
         st.markdown('<p style="text-align:center; color:#555; font-size:12px">Secured by Stripe · Cancel anytime · No hidden fees</p>', unsafe_allow_html=True)
 
