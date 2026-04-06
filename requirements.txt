@@ -7,3 +7,5 @@ openpyxl
 xlrd
 python-dotenv
 stripe
+folium
+streamlit-folium

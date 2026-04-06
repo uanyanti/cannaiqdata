@@ -3,6 +3,8 @@ import pandas as pd
 import plotly.express as px
 import os
 from payment import show_payment_page
+import folium
+from streamlit_folium import st_folium
 
 # Page config
 st.set_page_config(
@@ -230,6 +232,64 @@ st.markdown("""
     </span>
 </div>
 """, unsafe_allow_html=True)
+
+st.markdown("---")
+
+# Map View
+st.subheader("🗺️ Calgary Cannabis Store Map")
+st.markdown("Every licensed cannabis store in Calgary — colour coded by performance.")
+
+try:
+    geocoded = pd.read_csv("data/calgary_geocoded.csv" if os.path.exists("data/calgary_geocoded.csv") else "../data/calgary_geocoded.csv")
+    geocoded = geocoded.dropna(subset=["lat", "lng"])
+
+    # Create map centered on Calgary
+    m = folium.Map(location=[51.0447, -114.0719], zoom_start=11)
+
+    for idx, row in geocoded.iterrows():
+        # Color based on rating
+        if row.get("rating", 0) >= 4.5:
+            color = "green"
+        elif row.get("rating", 0) >= 4.0:
+            color = "orange"
+        else:
+            color = "red"
+
+        popup_text = f"""
+        <b>{row['Establishment Name']}</b><br>
+        Rating: {row.get('rating', 'N/A')}<br>
+        Reviews: {row.get('review_count', 'N/A')}<br>
+        {row.get('Site Address Line 1', '')}
+        """
+
+        folium.CircleMarker(
+            location=[row["lat"], row["lng"]],
+            radius=8,
+            color=color,
+            fill=True,
+            fill_color=color,
+            fill_opacity=0.7,
+            popup=folium.Popup(popup_text, max_width=200)
+        ).add_to(m)
+
+    # Legend
+    legend_html = """
+    <div style="position: fixed; bottom: 30px; left: 30px; z-index: 1000;
+                background: white; padding: 10px; border-radius: 8px;
+                border: 2px solid grey; font-size: 13px;">
+        <b>Store Rating</b><br>
+        <span style="color:green">●</span> 4.5+ stars<br>
+        <span style="color:orange">●</span> 4.0-4.5 stars<br>
+        <span style="color:red">●</span> Below 4.0
+    </div>
+    """
+    m.get_root().html.add_child(folium.Element(legend_html))
+
+    st_folium(m, width=None, height=500)
+    st.markdown('<div class="insight-box">📍 Click any store pin to see name, rating and address. Green = top performer, Red = underperformer.</div>', unsafe_allow_html=True)
+
+except Exception as e:
+    st.info("Map data loading...")
 
 st.markdown("---")
 
