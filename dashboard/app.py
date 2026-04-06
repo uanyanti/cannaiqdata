@@ -118,6 +118,18 @@ def load_data():
 
 enriched, saturation, calgary = load_data()
 
+# Access control
+def check_access():
+    # Check URL params for Stripe redirect
+    params = st.query_params
+    if params.get("subscribed") == "true":
+        st.session_state.has_access = True
+    
+    # Check session state
+    return st.session_state.get("has_access", False)
+
+has_access = check_access()
+
 # Header
 st.markdown('<p style="text-align:center; color:#2E7D32; font-size:13px; font-weight:bold; letter-spacing:2px">FREE PREVIEW</p>', unsafe_allow_html=True)
 st.markdown('<p class="main-header">🌿 CannaIQ</p>', unsafe_allow_html=True)
@@ -276,7 +288,8 @@ st.markdown("""
 st.markdown("---")
 
 # Map View
-st.subheader("🗺️ Calgary Cannabis Store Map")
+if has_access:
+    st.subheader("🗺️ Calgary Cannabis Store Map")
 st.markdown("Every licensed cannabis store in Calgary — colour coded by performance.")
 
 try:
@@ -326,11 +339,19 @@ try:
 
 except Exception as e:
     st.info("Map data loading...")
+    else:
+    st.markdown("""
+    <div style="background:#111; border:2px solid #2E7D32; padding:40px; border-radius:12px; text-align:center; margin:20px 0">
+        <p style="font-size:24px; color:#2E7D32; font-weight:bold">🗺️ Interactive Store Map</p>
+        <p style="color:#aaa; font-size:16px">See every cannabis store in Calgary plotted on a live map — colour coded by performance rating.</p>
+        <p style="color:#555; font-size:14px">🔒 Available to CannaIQ subscribers</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 st.markdown("---")
 
-# Postal Code Analysis
-st.subheader("📮 Street Level Intelligence — Postal Code Analysis")
+if has_access:
+    st.subheader("📮 Street Level Intelligence — Postal Code Analysis")
 st.markdown("Drill down beyond quadrants — see opportunity and saturation at postal code level.")
 
 try:
@@ -367,6 +388,14 @@ try:
 
 except Exception as e:
     st.info("Postal code data loading...")
+    else:
+    st.markdown("""
+    <div style="background:#111; border:2px solid #2E7D32; padding:40px; border-radius:12px; text-align:center; margin:20px 0">
+        <p style="font-size:24px; color:#2E7D32; font-weight:bold">📮 Street Level Intelligence</p>
+        <p style="color:#aaa; font-size:16px">33 Calgary postal codes ranked by opportunity and saturation score — drill down to street level.</p>
+        <p style="color:#555; font-size:14px">🔒 Available to CannaIQ subscribers</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 st.markdown("---")
 
@@ -392,8 +421,8 @@ st.markdown('<div class="insight-box">Bud Bar Stampede leads with 815 reviews an
 
 st.markdown("---")
 
-# Store Intelligence Table
-st.subheader("📋 Full Store Intelligence")
+if has_access:
+    st.subheader("📋 Full Store Intelligence")
 col_filter1, col_filter2 = st.columns(2)
 with col_filter1:
     min_rating = st.slider("Minimum Rating", 0.0, 5.0, 4.0, 0.1)
@@ -408,6 +437,14 @@ st.dataframe(
     filtered[["Establishment Name", "Address", "rating", "review_count", "business_status"]].sort_values("rating", ascending=False),
     use_container_width=True
 )
+else:
+    st.markdown("""
+    <div style="background:#111; border:2px solid #2E7D32; padding:40px; border-radius:12px; text-align:center; margin:20px 0">
+        <p style="font-size:24px; color:#2E7D32; font-weight:bold">📋 Full Store Intelligence</p>
+        <p style="color:#aaa; font-size:16px">Complete database of all 196 Calgary cannabis stores with ratings, addresses, review counts and business status.</p>
+        <p style="color:#555; font-size:14px">🔒 Available to CannaIQ subscribers</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 st.markdown("---")
 
@@ -426,6 +463,18 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown("---")
+
+# Access code for manual subscribers
+st.markdown("---")
+if not has_access:
+    st.markdown("**Already a subscriber?**")
+    access_code = st.text_input("Enter your access code", placeholder="cannaiq-XXXXX", type="password")
+    if st.button("Unlock Full Access", use_container_width=True):
+        if access_code.startswith("cannaiq-"):
+            st.session_state.has_access = True
+            st.rerun()
+        else:
+            st.error("Invalid access code. Please contact hello@cannaiqdata.ca")
 
 # Payment Section
 if st.button("🔒 Get Full Access — Join CannaIQ Beta", use_container_width=True):
