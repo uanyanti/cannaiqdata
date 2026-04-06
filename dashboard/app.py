@@ -293,6 +293,53 @@ except Exception as e:
 
 st.markdown("---")
 
+# Postal Code Analysis
+st.subheader("📮 Street Level Intelligence — Postal Code Analysis")
+st.markdown("Drill down beyond quadrants — see opportunity and saturation at postal code level.")
+
+try:
+    postal = pd.read_csv("data/calgary_postal_analysis.csv" if os.path.exists("data/calgary_postal_analysis.csv") else "../data/calgary_postal_analysis.csv")
+    
+    col_post1, col_post2 = st.columns(2)
+    
+    with col_post1:
+        st.markdown("**🎯 Top 10 Opportunity Postal Codes**")
+        top_postal = postal.head(10)[["fsa", "store_count", "avg_rating", "opportunity_score"]]
+        top_postal.columns = ["Postal Area", "Stores", "Avg Rating", "Opportunity Score"]
+        st.dataframe(top_postal, use_container_width=True)
+        st.markdown('<div class="insight-box">✅ These postal codes have the lowest competition and strongest entry opportunity in Calgary right now.</div>', unsafe_allow_html=True)
+
+    with col_post2:
+        st.markdown("**⚠️ Most Saturated Postal Codes**")
+        sat_postal = postal.nlargest(10, "saturation_score")[["fsa", "store_count", "saturation_score"]]
+        sat_postal.columns = ["Postal Area", "Stores", "Saturation Score"]
+        st.dataframe(sat_postal, use_container_width=True)
+        st.markdown('<div class="risk-box">⚠️ These postal codes are overcrowded — new entrants face maximum competition and margin pressure.</div>', unsafe_allow_html=True)
+
+    # Postal opportunity bar chart
+    fig_postal = px.bar(
+        postal.head(15).sort_values("opportunity_score"),
+        x="opportunity_score",
+        y="fsa",
+        orientation="h",
+        color="opportunity_score",
+        color_continuous_scale="RdYlGn",
+        title="Top 15 Calgary Postal Areas by Opportunity Score",
+        labels={"opportunity_score": "Opportunity Score", "fsa": "Postal Area"}
+    )
+    fig_postal.update_layout(
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        showlegend=False
+    )
+    st.plotly_chart(fig_postal, use_container_width=True)
+
+except Exception as e:
+    st.info("Postal code data loading...")
+
+
+st.markdown("---")
+
 # Competitive Landscape
 st.subheader("🏆 Competitive Landscape")
 st.markdown("Who dominates Calgary right now — and where the gaps are.")
