@@ -14,6 +14,17 @@ st.set_page_config(
 # CSS
 st.markdown("""
 <style>
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .main-header { font-size: 28px !important; }
+    .sub-header { font-size: 13px !important; }
+    .decision-banner-green { font-size: 14px !important; padding: 15px !important; }
+    .decision-banner-red { font-size: 14px !important; padding: 15px !important; }
+    .why-matters { font-size: 14px !important; padding: 15px !important; }
+    .cta-box { padding: 20px !important; }
+    .cta-box h2 { font-size: 20px !important; }
+    .cta-box p { font-size: 14px !important; }
+}
 .main-header {
     font-size: 48px;
     font-weight: bold;
@@ -35,6 +46,7 @@ st.markdown("""
     color: white;
     font-size: 20px;
     font-weight: bold;
+    margin-bottom: 10px;
 }
 .decision-banner-red {
     background-color: #B71C1C;
@@ -44,6 +56,7 @@ st.markdown("""
     color: white;
     font-size: 20px;
     font-weight: bold;
+    margin-bottom: 10px;
 }
 .insight-box {
     background-color: #1E1E1E;
@@ -85,6 +98,11 @@ st.markdown("""
     color: white;
     margin-top: 30px;
 }
+/* Hide Streamlit default elements */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
+.stDeployButton {display: none;}
 </style>
 """, unsafe_allow_html=True)
 
