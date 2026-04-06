@@ -120,12 +120,9 @@ enriched, saturation, calgary = load_data()
 
 # Access control
 def check_access():
-    # Check URL params for Stripe redirect
     params = st.query_params
     if params.get("subscribed") == "true":
         st.session_state.has_access = True
-    
-    # Check session state
     return st.session_state.get("has_access", False)
 
 has_access = check_access()
@@ -173,7 +170,6 @@ with col_no:
     </div>
     """, unsafe_allow_html=True)
 
-# Confidence tag moved up
 st.markdown("""
 <div style="text-align:center; margin-top:15px; margin-bottom:10px">
     <span style="background:#333; padding:6px 16px; border-radius:20px; color:#aaa; font-size:13px">
@@ -278,7 +274,6 @@ with right:
     st.plotly_chart(fig_opp, use_container_width=True)
     st.markdown('<div class="insight-box">✅ Downtown Calgary = highest opportunity score in the city. Low saturation, strong foot traffic, underserved market.</div>', unsafe_allow_html=True)
 
-# Lock teaser under charts
 st.markdown("""
 <div style="background:#111; border:1px solid #2E7D32; padding:15px; border-radius:8px; text-align:center; margin-top:10px">
     <p style="color:#aaa; margin:0">🔒 <strong style="color:#2E7D32">Full location-level insights</strong> — exact street addresses, store performance scores, and expansion signals available in premium version.</p>
@@ -287,59 +282,52 @@ st.markdown("""
 
 st.markdown("---")
 
-# Map View
+# Map View — GATED
 if has_access:
     st.subheader("🗺️ Calgary Cannabis Store Map")
-st.markdown("Every licensed cannabis store in Calgary — colour coded by performance.")
-
-try:
-    geocoded = pd.read_csv("data/calgary_geocoded.csv" if os.path.exists("data/calgary_geocoded.csv") else "../data/calgary_geocoded.csv")
-    geocoded = geocoded.dropna(subset=["lat", "lng"])
-
-    m = folium.Map(location=[51.0447, -114.0719], zoom_start=11)
-
-    for idx, row in geocoded.iterrows():
-        if row.get("rating", 0) >= 4.5:
-            color = "green"
-        elif row.get("rating", 0) >= 4.0:
-            color = "orange"
-        else:
-            color = "red"
-
-        popup_text = f"""
-        <b>{row['Establishment Name']}</b><br>
-        Rating: {row.get('rating', 'N/A')}<br>
-        Reviews: {row.get('review_count', 'N/A')}<br>
-        {row.get('Site Address Line 1', '')}
+    st.markdown("Every licensed cannabis store in Calgary — colour coded by performance.")
+    try:
+        geocoded = pd.read_csv("data/calgary_geocoded.csv" if os.path.exists("data/calgary_geocoded.csv") else "../data/calgary_geocoded.csv")
+        geocoded = geocoded.dropna(subset=["lat", "lng"])
+        m = folium.Map(location=[51.0447, -114.0719], zoom_start=11)
+        for idx, row in geocoded.iterrows():
+            if row.get("rating", 0) >= 4.5:
+                color = "green"
+            elif row.get("rating", 0) >= 4.0:
+                color = "orange"
+            else:
+                color = "red"
+            popup_text = f"""
+            <b>{row['Establishment Name']}</b><br>
+            Rating: {row.get('rating', 'N/A')}<br>
+            Reviews: {row.get('review_count', 'N/A')}<br>
+            {row.get('Site Address Line 1', '')}
+            """
+            folium.CircleMarker(
+                location=[row["lat"], row["lng"]],
+                radius=8,
+                color=color,
+                fill=True,
+                fill_color=color,
+                fill_opacity=0.7,
+                popup=folium.Popup(popup_text, max_width=200)
+            ).add_to(m)
+        legend_html = """
+        <div style="position: fixed; bottom: 30px; left: 30px; z-index: 1000;
+                    background: white; padding: 10px; border-radius: 8px;
+                    border: 2px solid grey; font-size: 13px;">
+            <b>Store Rating</b><br>
+            <span style="color:green">●</span> 4.5+ stars<br>
+            <span style="color:orange">●</span> 4.0-4.5 stars<br>
+            <span style="color:red">●</span> Below 4.0
+        </div>
         """
-
-        folium.CircleMarker(
-            location=[row["lat"], row["lng"]],
-            radius=8,
-            color=color,
-            fill=True,
-            fill_color=color,
-            fill_opacity=0.7,
-            popup=folium.Popup(popup_text, max_width=200)
-        ).add_to(m)
-
-    legend_html = """
-    <div style="position: fixed; bottom: 30px; left: 30px; z-index: 1000;
-                background: white; padding: 10px; border-radius: 8px;
-                border: 2px solid grey; font-size: 13px;">
-        <b>Store Rating</b><br>
-        <span style="color:green">●</span> 4.5+ stars<br>
-        <span style="color:orange">●</span> 4.0-4.5 stars<br>
-        <span style="color:red">●</span> Below 4.0
-    </div>
-    """
-    m.get_root().html.add_child(folium.Element(legend_html))
-    st_folium(m, width=None, height=500)
-    st.markdown('<div class="insight-box">📍 Click any store pin to see name, rating and address. Green = top performer, Red = underperformer.</div>', unsafe_allow_html=True)
-
-except Exception as e:
-    st.info("Map data loading...")
-    else:
+        m.get_root().html.add_child(folium.Element(legend_html))
+        st_folium(m, width=None, height=500)
+        st.markdown('<div class="insight-box">📍 Click any store pin to see name, rating and address. Green = top performer, Red = underperformer.</div>', unsafe_allow_html=True)
+    except Exception as e:
+        st.info("Map data loading...")
+else:
     st.markdown("""
     <div style="background:#111; border:2px solid #2E7D32; padding:40px; border-radius:12px; text-align:center; margin:20px 0">
         <p style="font-size:24px; color:#2E7D32; font-weight:bold">🗺️ Interactive Store Map</p>
@@ -350,45 +338,40 @@ except Exception as e:
 
 st.markdown("---")
 
+# Postal Code Analysis — GATED
 if has_access:
     st.subheader("📮 Street Level Intelligence — Postal Code Analysis")
-st.markdown("Drill down beyond quadrants — see opportunity and saturation at postal code level.")
-
-try:
-    postal = pd.read_csv("data/calgary_postal_analysis.csv" if os.path.exists("data/calgary_postal_analysis.csv") else "../data/calgary_postal_analysis.csv")
-
-    col_post1, col_post2 = st.columns(2)
-
-    with col_post1:
-        st.markdown("**🎯 Top 10 Opportunity Postal Codes**")
-        top_postal = postal.head(10)[["fsa", "store_count", "avg_rating", "opportunity_score"]]
-        top_postal.columns = ["Postal Area", "Stores", "Avg Rating", "Opportunity Score"]
-        st.dataframe(top_postal, use_container_width=True)
-        st.markdown('<div class="insight-box">✅ These postal codes have the lowest competition and strongest entry opportunity in Calgary right now.</div>', unsafe_allow_html=True)
-
-    with col_post2:
-        st.markdown("**⚠️ Most Saturated Postal Codes**")
-        sat_postal = postal.nlargest(10, "saturation_score")[["fsa", "store_count", "saturation_score"]]
-        sat_postal.columns = ["Postal Area", "Stores", "Saturation Score"]
-        st.dataframe(sat_postal, use_container_width=True)
-        st.markdown('<div class="risk-box">⚠️ These postal codes are overcrowded — new entrants face maximum competition and margin pressure.</div>', unsafe_allow_html=True)
-
-    fig_postal = px.bar(
-        postal.head(15).sort_values("opportunity_score"),
-        x="opportunity_score",
-        y="fsa",
-        orientation="h",
-        color="opportunity_score",
-        color_continuous_scale="RdYlGn",
-        title="Top 15 Calgary Postal Areas by Opportunity Score",
-        labels={"opportunity_score": "Opportunity Score", "fsa": "Postal Area"}
-    )
-    fig_postal.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', showlegend=False)
-    st.plotly_chart(fig_postal, use_container_width=True)
-
-except Exception as e:
-    st.info("Postal code data loading...")
-    else:
+    st.markdown("Drill down beyond quadrants — see opportunity and saturation at postal code level.")
+    try:
+        postal = pd.read_csv("data/calgary_postal_analysis.csv" if os.path.exists("data/calgary_postal_analysis.csv") else "../data/calgary_postal_analysis.csv")
+        col_post1, col_post2 = st.columns(2)
+        with col_post1:
+            st.markdown("**🎯 Top 10 Opportunity Postal Codes**")
+            top_postal = postal.head(10)[["fsa", "store_count", "avg_rating", "opportunity_score"]]
+            top_postal.columns = ["Postal Area", "Stores", "Avg Rating", "Opportunity Score"]
+            st.dataframe(top_postal, use_container_width=True)
+            st.markdown('<div class="insight-box">✅ These postal codes have the lowest competition and strongest entry opportunity in Calgary right now.</div>', unsafe_allow_html=True)
+        with col_post2:
+            st.markdown("**⚠️ Most Saturated Postal Codes**")
+            sat_postal = postal.nlargest(10, "saturation_score")[["fsa", "store_count", "saturation_score"]]
+            sat_postal.columns = ["Postal Area", "Stores", "Saturation Score"]
+            st.dataframe(sat_postal, use_container_width=True)
+            st.markdown('<div class="risk-box">⚠️ These postal codes are overcrowded — new entrants face maximum competition and margin pressure.</div>', unsafe_allow_html=True)
+        fig_postal = px.bar(
+            postal.head(15).sort_values("opportunity_score"),
+            x="opportunity_score",
+            y="fsa",
+            orientation="h",
+            color="opportunity_score",
+            color_continuous_scale="RdYlGn",
+            title="Top 15 Calgary Postal Areas by Opportunity Score",
+            labels={"opportunity_score": "Opportunity Score", "fsa": "Postal Area"}
+        )
+        fig_postal.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', showlegend=False)
+        st.plotly_chart(fig_postal, use_container_width=True)
+    except Exception as e:
+        st.info("Postal code data loading...")
+else:
     st.markdown("""
     <div style="background:#111; border:2px solid #2E7D32; padding:40px; border-radius:12px; text-align:center; margin:20px 0">
         <p style="font-size:24px; color:#2E7D32; font-weight:bold">📮 Street Level Intelligence</p>
@@ -421,22 +404,21 @@ st.markdown('<div class="insight-box">Bud Bar Stampede leads with 815 reviews an
 
 st.markdown("---")
 
+# Store Intelligence Table — GATED
 if has_access:
     st.subheader("📋 Full Store Intelligence")
-col_filter1, col_filter2 = st.columns(2)
-with col_filter1:
-    min_rating = st.slider("Minimum Rating", 0.0, 5.0, 4.0, 0.1)
-with col_filter2:
-    status_filter = st.selectbox("Business Status", ["All", "OPERATIONAL", "CLOSED_PERMANENTLY"])
-
-filtered = enriched[enriched['rating'] >= min_rating]
-if status_filter != "All":
-    filtered = filtered[filtered['business_status'] == status_filter]
-
-st.dataframe(
-    filtered[["Establishment Name", "Address", "rating", "review_count", "business_status"]].sort_values("rating", ascending=False),
-    use_container_width=True
-)
+    col_filter1, col_filter2 = st.columns(2)
+    with col_filter1:
+        min_rating = st.slider("Minimum Rating", 0.0, 5.0, 4.0, 0.1)
+    with col_filter2:
+        status_filter = st.selectbox("Business Status", ["All", "OPERATIONAL", "CLOSED_PERMANENTLY"])
+    filtered = enriched[enriched['rating'] >= min_rating]
+    if status_filter != "All":
+        filtered = filtered[filtered['business_status'] == status_filter]
+    st.dataframe(
+        filtered[["Establishment Name", "Address", "rating", "review_count", "business_status"]].sort_values("rating", ascending=False),
+        use_container_width=True
+    )
 else:
     st.markdown("""
     <div style="background:#111; border:2px solid #2E7D32; padding:40px; border-radius:12px; text-align:center; margin:20px 0">
@@ -464,8 +446,7 @@ st.markdown("""
 
 st.markdown("---")
 
-# Access code for manual subscribers
-st.markdown("---")
+# Access code + Payment
 if not has_access:
     st.markdown("**Already a subscriber?**")
     access_code = st.text_input("Enter your access code", placeholder="cannaiq-XXXXX", type="password")
@@ -476,7 +457,6 @@ if not has_access:
         else:
             st.error("Invalid access code. Please contact hello@cannaiqdata.ca")
 
-# Payment Section
 if st.button("🔒 Get Full Access — Join CannaIQ Beta", use_container_width=True):
     st.session_state.show_payment = True
 
