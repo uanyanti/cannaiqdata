@@ -7,13 +7,6 @@ from dotenv import load_dotenv
 base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv(os.path.join(base, ".env"))
 
-def get_stripe_key():
-    key = os.environ.get("STRIPE_SECRET_KEY", "")
-    return key
-
-def get_price_id():
-    return os.environ.get("STRIPE_PRICE_ID", "")
-
 def show_payment_page():
     st.markdown("""
     <style>
@@ -57,17 +50,19 @@ def show_payment_page():
 
         st.markdown("""
         <div class="feature-list">
-    <p style="color:#2E7D32; font-weight:bold">What You Get:</p>
-    <p style="color:#ffffff">✅ Full Calgary market intelligence dashboard</p>
-    <p style="color:#ffffff">✅ Neighbourhood saturation scores</p>
-    <p style="color:#ffffff">✅ Opportunity scores by area</p>
-    <p style="color:#ffffff">✅ 196 store competitive landscape</p>
-    <p style="color:#ffffff">✅ Updated daily</p>
-    <p style="color:#ffffff">✅ New store alerts</p>
-    <p style="color:#aaaaaa">🔜 Edmonton data (coming soon)</p>
-    <p style="color:#aaaaaa">🔜 Vancouver data (coming soon)</p>
-    <p style="color:#aaaaaa">🔜 Predictive analytics (coming soon)</p>
-</div>
+            <p style="color:#2E7D32; font-weight:bold">What You Get:</p>
+            <p style="color:#ffffff">✅ Full Calgary market intelligence dashboard</p>
+            <p style="color:#ffffff">✅ Neighbourhood saturation scores</p>
+            <p style="color:#ffffff">✅ Opportunity scores by area</p>
+            <p style="color:#ffffff">✅ 196 store competitive landscape</p>
+            <p style="color:#ffffff">✅ Interactive store map</p>
+            <p style="color:#ffffff">✅ Postal code level analysis</p>
+            <p style="color:#ffffff">✅ Updated daily</p>
+            <p style="color:#ffffff">✅ New store alerts</p>
+            <p style="color:#aaaaaa">🔜 Edmonton data (coming soon)</p>
+            <p style="color:#aaaaaa">🔜 Vancouver data (coming soon)</p>
+            <p style="color:#aaaaaa">🔜 Predictive analytics (coming soon)</p>
+        </div>
         """, unsafe_allow_html=True)
 
         st.markdown("---")
@@ -75,47 +70,47 @@ def show_payment_page():
         email = st.text_input("Your email address", placeholder="you@example.com")
 
         if st.button("Start Subscription — $199/month CAD", use_container_width=True):
-    if not email:
-        st.error("Please enter your email address")
-    else:
-        secret_key = get_stripe_key()
-        price_id = get_price_id()
-        
-        if not secret_key:
-            st.error("Configuration error — please contact hello@cannaiqdata.ca")
-        else:
-            try:
-                stripe.api_key = secret_key
-                session = stripe.checkout.Session.create(
-                    payment_method_types=["card"],
-                    line_items=[{
-                        "price": price_id,
-                        "quantity": 1
-                    }],
-                    mode="subscription",
-                    customer_email=email,
-                    success_url="https://cannaiqdata.ca?subscribed=true",
-                    cancel_url="https://cannaiqdata.ca?cancelled=true",
-                )
-                st.success("Your secure checkout is ready!")
-                st.markdown(f"""
-                <a href="{session.url}" target="_blank" style="
-                    display:block;
-                    background:#2E7D32;
-                    color:white;
-                    padding:15px;
-                    text-align:center;
-                    border-radius:10px;
-                    font-size:18px;
-                    font-weight:bold;
-                    text-decoration:none;
-                    margin-top:10px;
-                ">
-                    Click Here To Complete Payment
-                </a>
-                """, unsafe_allow_html=True)
-            except Exception as e:
-                st.error(f"Payment error: {e}")
+            if not email:
+                st.error("Please enter your email address")
+            else:
+                secret_key = os.environ.get("STRIPE_SECRET_KEY", "")
+                price_id = os.environ.get("STRIPE_PRICE_ID", "")
+
+                if not secret_key:
+                    st.error("Configuration error — please contact hello@cannaiqdata.ca")
+                else:
+                    try:
+                        stripe.api_key = secret_key
+                        session = stripe.checkout.Session.create(
+                            payment_method_types=["card"],
+                            line_items=[{
+                                "price": price_id,
+                                "quantity": 1
+                            }],
+                            mode="subscription",
+                            customer_email=email,
+                            success_url="https://cannaiqdata.ca?subscribed=true",
+                            cancel_url="https://cannaiqdata.ca?cancelled=true",
+                        )
+                        st.success("Your secure checkout is ready!")
+                        st.markdown(f"""
+                        <a href="{session.url}" target="_blank" style="
+                            display:block;
+                            background:#2E7D32;
+                            color:white;
+                            padding:15px;
+                            text-align:center;
+                            border-radius:10px;
+                            font-size:18px;
+                            font-weight:bold;
+                            text-decoration:none;
+                            margin-top:10px;
+                        ">
+                            Click Here To Complete Payment
+                        </a>
+                        """, unsafe_allow_html=True)
+                    except Exception as e:
+                        st.error(f"Payment error: {e}")
 
         st.markdown('<p style="text-align:center; color:#555; font-size:12px">Secured by Stripe · Cancel anytime · No hidden fees</p>', unsafe_allow_html=True)
 
