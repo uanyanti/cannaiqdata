@@ -7,14 +7,10 @@ from dotenv import load_dotenv
 base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv(os.path.join(base, ".env"))
 
-try:
-    stripe.api_key = st.secrets["STRIPE_SECRET_KEY"]
-    PRICE_ID = st.secrets["STRIPE_PRICE_ID"]
-    PUBLISHABLE_KEY = st.secrets["STRIPE_PUBLISHABLE_KEY"]
-except:
-    stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
-    PRICE_ID = os.getenv("STRIPE_PRICE_ID")
-    PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY")
+# Works for both Railway and local
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY") or st.secrets.get("STRIPE_SECRET_KEY", "")
+PRICE_ID = os.getenv("STRIPE_PRICE_ID") or st.secrets.get("STRIPE_PRICE_ID", "")
+PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY") or st.secrets.get("STRIPE_PUBLISHABLE_KEY", "")
 
 def show_payment_page():
     st.markdown("""
@@ -59,17 +55,17 @@ def show_payment_page():
 
         st.markdown("""
         <div class="feature-list">
-            <p style="color:#2E7D32; font-weight:bold">What You Get:</p>
-            <p>Full Calgary market intelligence dashboard</p>
-            <p>Neighbourhood saturation scores</p>
-            <p>Opportunity scores by area</p>
-            <p>196 store competitive landscape</p>
-            <p>Updated daily</p>
-            <p>New store alerts</p>
-            <p>Edmonton data (coming soon)</p>
-            <p>Vancouver data (coming soon)</p>
-            <p>Predictive analytics (coming soon)</p>
-        </div>
+    <p style="color:#2E7D32; font-weight:bold">What You Get:</p>
+    <p style="color:#ffffff">✅ Full Calgary market intelligence dashboard</p>
+    <p style="color:#ffffff">✅ Neighbourhood saturation scores</p>
+    <p style="color:#ffffff">✅ Opportunity scores by area</p>
+    <p style="color:#ffffff">✅ 196 store competitive landscape</p>
+    <p style="color:#ffffff">✅ Updated daily</p>
+    <p style="color:#ffffff">✅ New store alerts</p>
+    <p style="color:#aaaaaa">🔜 Edmonton data (coming soon)</p>
+    <p style="color:#aaaaaa">🔜 Vancouver data (coming soon)</p>
+    <p style="color:#aaaaaa">🔜 Predictive analytics (coming soon)</p>
+</div>
         """, unsafe_allow_html=True)
 
         st.markdown("---")
