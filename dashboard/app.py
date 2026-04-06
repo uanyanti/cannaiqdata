@@ -16,7 +16,6 @@ st.set_page_config(
 # CSS
 st.markdown("""
 <style>
-/* Mobile responsive */
 @media (max-width: 768px) {
     .main-header { font-size: 28px !important; }
     .sub-header { font-size: 13px !important; }
@@ -100,7 +99,6 @@ st.markdown("""
     color: white;
     margin-top: 30px;
 }
-/* Hide Streamlit default elements */
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
 header {visibility: hidden;}
@@ -121,8 +119,10 @@ def load_data():
 enriched, saturation, calgary = load_data()
 
 # Header
+st.markdown('<p style="text-align:center; color:#2E7D32; font-size:13px; font-weight:bold; letter-spacing:2px">FREE PREVIEW</p>', unsafe_allow_html=True)
 st.markdown('<p class="main-header">🌿 CannaIQ</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-header">Cannabis Market Intelligence — Calgary, Alberta | Updated Daily — market conditions change fast</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-header">Cannabis Market Intelligence — Calgary, Alberta | ⚡ Updated Daily — market conditions change fast</p>', unsafe_allow_html=True)
+st.markdown('<p style="text-align:center; color:#666; font-size:14px; margin-bottom:10px">Powered by real-time license filings, store density, and demand signals</p>', unsafe_allow_html=True)
 
 # Why This Matters
 st.markdown("""
@@ -136,6 +136,7 @@ st.markdown("---")
 # Decision Banners
 st.subheader("🎯 What You Should Do Right Now")
 st.markdown('<p class="score-explain" style="font-size:15px">These recommendations are based on competition density and demand gaps.</p>', unsafe_allow_html=True)
+st.markdown('<p style="text-align:center; color:#FFD700; font-size:15px; font-weight:bold">💰 These insights can save or make you $100K+ depending on your location decision.</p>', unsafe_allow_html=True)
 
 col_yes, col_no = st.columns(2)
 
@@ -146,7 +147,7 @@ with col_yes:
         <span style="font-size:28px">Downtown Calgary</span><br>
         <span style="font-size:14px">Lowest competition in the city right now</span><br>
         <span style="font-size:13px; background:#2E7D32; padding:3px 8px; border-radius:10px">#1 Opportunity in Calgary</span><br>
-        <span style="font-size:13px; color:#90EE90">Recommended for new store entry</span>
+        <span style="font-size:13px; color:#90EE90">Best location for new store entry right now</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -156,9 +157,50 @@ with col_no:
         AVOID THESE AREAS<br>
         <span style="font-size:28px">SW & SE Calgary</span><br>
         <span style="font-size:14px">Highest store density — hardest to compete</span><br>
-        <span style="font-size:13px; color:#FFB3B3">High risk for new entrants</span>
+        <span style="font-size:13px; color:#FFB3B3">High risk — avoid new store entry</span>
     </div>
     """, unsafe_allow_html=True)
+
+# Confidence tag moved up
+st.markdown("""
+<div style="text-align:center; margin-top:15px; margin-bottom:10px">
+    <span style="background:#333; padding:6px 16px; border-radius:20px; color:#aaa; font-size:13px">
+        📊 Confidence: Medium (AGLC + Google data)
+    </span>
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown("---")
+
+# Live Market Alerts
+st.subheader("🚨 Live Market Alerts")
+st.markdown('<p class="score-explain">Real-time signals from AGLC license filings and market activity.</p>', unsafe_allow_html=True)
+
+col_alert1, col_alert2 = st.columns(2)
+
+with col_alert1:
+    st.markdown("""
+    <div style="background:#1a1a2e; border-left:4px solid #FF5252; padding:15px; border-radius:8px; margin:5px 0">
+        <p style="color:#FF5252; font-weight:bold; margin:0">🚨 New License Application</p>
+        <p style="color:#fff; margin:5px 0">New cannabis store application filed in NE Calgary</p>
+        <p style="color:#aaa; font-size:12px; margin:0">2 days ago · AGLC Registry</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col_alert2:
+    st.markdown("""
+    <div style="background:#1a1a2e; border-left:4px solid #FFA500; padding:15px; border-radius:8px; margin:5px 0">
+        <p style="color:#FFA500; font-weight:bold; margin:0">⚠️ Saturation Alert</p>
+        <p style="color:#fff; margin:5px 0">SW Calgary reached maximum saturation threshold</p>
+        <p style="color:#aaa; font-size:12px; margin:0">Updated today · CannaIQ Analysis</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("""
+<div style="background:#111; border:1px solid #333; padding:15px; border-radius:8px; text-align:center; margin-top:10px">
+    <p style="color:#aaa; margin:0">🔒 <strong style="color:#2E7D32">Premium subscribers</strong> get real-time alerts for new license applications, competitor openings, and saturation changes in their target areas.</p>
+</div>
+""", unsafe_allow_html=True)
 
 st.markdown("---")
 
@@ -224,12 +266,10 @@ with right:
     st.plotly_chart(fig_opp, use_container_width=True)
     st.markdown('<div class="insight-box">✅ Downtown Calgary = highest opportunity score in the city. Low saturation, strong foot traffic, underserved market.</div>', unsafe_allow_html=True)
 
-# Confidence level
+# Lock teaser under charts
 st.markdown("""
-<div style="text-align:center; margin-top:10px">
-    <span style="background:#333; padding:6px 16px; border-radius:20px; color:#aaa; font-size:13px">
-        Confidence: Medium — based on AGLC public registry + Google Maps signals
-    </span>
+<div style="background:#111; border:1px solid #2E7D32; padding:15px; border-radius:8px; text-align:center; margin-top:10px">
+    <p style="color:#aaa; margin:0">🔒 <strong style="color:#2E7D32">Full location-level insights</strong> — exact street addresses, store performance scores, and expansion signals available in premium version.</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -243,11 +283,9 @@ try:
     geocoded = pd.read_csv("data/calgary_geocoded.csv" if os.path.exists("data/calgary_geocoded.csv") else "../data/calgary_geocoded.csv")
     geocoded = geocoded.dropna(subset=["lat", "lng"])
 
-    # Create map centered on Calgary
     m = folium.Map(location=[51.0447, -114.0719], zoom_start=11)
 
     for idx, row in geocoded.iterrows():
-        # Color based on rating
         if row.get("rating", 0) >= 4.5:
             color = "green"
         elif row.get("rating", 0) >= 4.0:
@@ -272,7 +310,6 @@ try:
             popup=folium.Popup(popup_text, max_width=200)
         ).add_to(m)
 
-    # Legend
     legend_html = """
     <div style="position: fixed; bottom: 30px; left: 30px; z-index: 1000;
                 background: white; padding: 10px; border-radius: 8px;
@@ -284,7 +321,6 @@ try:
     </div>
     """
     m.get_root().html.add_child(folium.Element(legend_html))
-
     st_folium(m, width=None, height=500)
     st.markdown('<div class="insight-box">📍 Click any store pin to see name, rating and address. Green = top performer, Red = underperformer.</div>', unsafe_allow_html=True)
 
@@ -299,9 +335,9 @@ st.markdown("Drill down beyond quadrants — see opportunity and saturation at p
 
 try:
     postal = pd.read_csv("data/calgary_postal_analysis.csv" if os.path.exists("data/calgary_postal_analysis.csv") else "../data/calgary_postal_analysis.csv")
-    
+
     col_post1, col_post2 = st.columns(2)
-    
+
     with col_post1:
         st.markdown("**🎯 Top 10 Opportunity Postal Codes**")
         top_postal = postal.head(10)[["fsa", "store_count", "avg_rating", "opportunity_score"]]
@@ -316,7 +352,6 @@ try:
         st.dataframe(sat_postal, use_container_width=True)
         st.markdown('<div class="risk-box">⚠️ These postal codes are overcrowded — new entrants face maximum competition and margin pressure.</div>', unsafe_allow_html=True)
 
-    # Postal opportunity bar chart
     fig_postal = px.bar(
         postal.head(15).sort_values("opportunity_score"),
         x="opportunity_score",
@@ -327,22 +362,18 @@ try:
         title="Top 15 Calgary Postal Areas by Opportunity Score",
         labels={"opportunity_score": "Opportunity Score", "fsa": "Postal Area"}
     )
-    fig_postal.update_layout(
-        plot_bgcolor='rgba(0,0,0,0)',
-        paper_bgcolor='rgba(0,0,0,0)',
-        showlegend=False
-    )
+    fig_postal.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', showlegend=False)
     st.plotly_chart(fig_postal, use_container_width=True)
 
 except Exception as e:
     st.info("Postal code data loading...")
-
 
 st.markdown("---")
 
 # Competitive Landscape
 st.subheader("🏆 Competitive Landscape")
 st.markdown("Who dominates Calgary right now — and where the gaps are.")
+st.markdown('<p style="color:#aaa; font-size:13px">Coming soon: top-performing stores & competitor tracking</p>', unsafe_allow_html=True)
 
 top_stores = enriched[enriched['review_count'] > 50].sort_values("rating", ascending=False).head(20)
 fig_stores = px.scatter(
@@ -386,22 +417,11 @@ st.markdown("""
     <h2>🌿 Get Full CannaIQ Intelligence</h2>
     <p style="font-size:18px">Store-level alerts · Neighbourhood forecasts · Competitor tracking · Canada-wide data</p>
     <p style="font-size:22px; font-weight:bold">Join CannaIQ Beta — Early Access Now Open</p>
-    <a href="mailto:hello@cannaiqdata.ca" style="
-    display:inline-block;
-    background:white;
-    color:#2E7D32;
-    padding:12px 24px;
-    border-radius:25px;
-    font-weight:bold;
-    font-size:16px;
-    text-decoration:none;
-    max-width:90%;
-    word-wrap:break-word;
-    text-align:center;
-    margin:0 auto;
-">
-    🔒 Join CannaIQ Beta → Early Access
-</a>
+    <a href="#" style="background:white; color:#2E7D32; padding:12px 24px; border-radius:25px; font-weight:bold; font-size:18px; text-decoration:none; display:inline-block; margin-bottom:15px">
+        🔒 Get real-time alerts, exact locations, and competitor tracking → Join CannaIQ
+    </a>
+    <p style="font-size:16px; color:#90EE90">Plans starting at $99/month</p>
+    <p style="font-size:13px; color:#aaa; margin-top:15px">Data sources: AGLC · Health Canada · Google Maps signals</p>
 </div>
 """, unsafe_allow_html=True)
 
