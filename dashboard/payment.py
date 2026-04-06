@@ -3,14 +3,14 @@ import stripe
 import os
 from dotenv import load_dotenv
 
-# Load from Streamlit secrets or .env
+# Load .env for local development
 base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv(os.path.join(base, ".env"))
 
-# Works for both Railway and local
-stripe.api_key = os.getenv("STRIPE_SECRET_KEY") or st.secrets.get("STRIPE_SECRET_KEY", "")
-PRICE_ID = os.getenv("STRIPE_PRICE_ID") or st.secrets.get("STRIPE_PRICE_ID", "")
-PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY") or st.secrets.get("STRIPE_PUBLISHABLE_KEY", "")
+# Get keys — Railway environment variables only
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY", "")
+PRICE_ID = os.getenv("STRIPE_PRICE_ID", "")
+PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY", "")
 
 def show_payment_page():
     st.markdown("""
