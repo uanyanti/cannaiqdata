@@ -58,9 +58,35 @@ section[data-testid="stSidebar"] {
 
 /* Main container — centered */
 .main .block-container {
-    max-width: 900px !important;
-    padding: 2rem 1.5rem !important;
+    max-width: 780px !important;
+    padding: 2rem 2rem !important;
     margin: 0 auto !important;
+}
+
+/* Fix grey text visibility */
+p, label, span, div {
+    color: #cccccc !important;
+}
+.stMarkdown p {
+    color: #cccccc !important;
+}
+[data-testid="stMarkdownContainer"] p {
+    color: #cccccc !important;
+}
+input::placeholder {
+    color: #666 !important;
+}
+[data-testid="stTextInput"] label {
+    color: #aaaaaa !important;
+}
+[data-testid="stSelectbox"] label {
+    color: #aaaaaa !important;
+}
+[data-testid="stSlider"] label {
+    color: #aaaaaa !important;
+}
+.stCheckbox label {
+    color: #cccccc !important;
 }
 
 /* Hide Streamlit elements */
