@@ -108,10 +108,10 @@ Authorization Number,Site City Name,Establishment Name,Manager Name,Initial Effe
 782591,CALGARY,Bud Bar Stampede,"Woo, Justin Clay H., Mgr
 ",8/10/2021,101-206 11 AVE SE,,AB,T2G 0X8,8255404539.0,Yes
 802723,CALGARY,Bud Mart,,6/6/2024,1-1704 61 ST SE,,AB,T2A 4V5,4038996313.0,Yes
-812647,CALGARY,Bud Mart,"Bhullar, Karandev, Mgr
-",7/24/2025,160-5305 COUNTRY HILLS BLVD NE,,AB,T3N 0X4,5877009810.0,Yes
 786064,CALGARY,Bud Mart,"Bhullar, Gurdev Singh, Mgr
 ",6/4/2024,148-20 COPPERPOND PASSAGE SE,,AB,T2Z 1Z4,4039720649.0,Yes
+812647,CALGARY,Bud Mart,"Bhullar, Karandev, Mgr
+",7/24/2025,160-5305 COUNTRY HILLS BLVD NE,,AB,T3N 0X4,5877009810.0,Yes
 815806,CALGARY,Bud Mart,"Bhullar, Karandev Singh, Mgr
 ",1/30/2026,115-14919 DEER RIDGE DR SE,,AB,T2J 7C4,4034601122.0,Yes
 812581,CALGARY,Bud Mountain Aeroponics,"Cowan, Kevin Brandon, Mgr
@@ -158,6 +158,10 @@ Authorization Number,Site City Name,Establishment Name,Manager Name,Initial Effe
 ",3/3/2021,1235 11 AVENUE SW,,AB,T3C 0M5,4034551930.0,Yes
 783054,CALGARY,Canna Cabana,"Jimenez, Jan Michael A, Mgr
 ",11/17/2021,103-3928 EDMONTON TRAIL NE,,AB,T2E 3P6,8255404402.0,Yes
+782211,CALGARY,Canna Cabana,"Wheeler, Ethan James, Mgr
+",11/18/2020,1535 19 ST NW,,AB,T2N 2K2,5873924720.0,Yes
+782215,CALGARY,Canna Cabana,"Wheeler, Ethan James, Mgr
+",11/18/2020,21-2500 4 ST SW,,AB,T2S 1X6,5873924660.0,Yes
 782209,CALGARY,Canna Cabana,"Wheeler, Ethan James, Mgr
 ",11/18/2020,130-5403 CROWCHILD TRAIL NW,,AB,T3B 4Z1,5873924650.0,Yes
 782216,CALGARY,Canna Cabana,"Wheeler, Ethan James, Mgr
@@ -168,10 +172,6 @@ Authorization Number,Site City Name,Establishment Name,Manager Name,Initial Effe
 ",8/12/2019,610-20 CROWFOOT CRES NW,,AB,T3G 2P6,4037645399.0,Yes
 782210,CALGARY,Canna Cabana,"Wheeler, Ethan James, Mgr
 ",11/18/2020,144-55 CASTLERIDGE BLVD NE,,AB,T3J 3J8,5873924670.0,Yes
-782211,CALGARY,Canna Cabana,"Wheeler, Ethan James, Mgr
-",11/18/2020,1535 19 ST NW,,AB,T2N 2K2,5873924720.0,Yes
-782215,CALGARY,Canna Cabana,"Wheeler, Ethan James, Mgr
-",11/18/2020,21-2500 4 ST SW,,AB,T2S 1X6,5873924660.0,Yes
 782222,CALGARY,Canna Cabana,"Wheeler, Ethan James, Mgr
 ",11/18/2020,9-2015 32 AVE NE,,AB,T2E 6Z3,5873924715.0,Yes
 782212,CALGARY,Canna Cabana,"Wheeler, Ethan James, Mgr
@@ -514,11 +514,11 @@ Authorization Number,Site City Name,Establishment Name,Manager Name,Initial Effe
 782562,CLAIRMONT,URBN Leaf Cannabis Company,"Ruether, Craig Thomas, Mgr
 ",2/26/2021,7201 99 ST,,AB,T8X 5B1,7805333363.0,No 
 801892,CLARESHOLM,Range Bud Supply,"Mail, Eli Samuel, Mgr
-",6/13/2024,4817 1 STREET,,AB,T0L 0T0,4034680045.0,Yes
+",5/9/2024,4817 1 STREET,,AB,T0L 0T0,4034680045.0,Yes
 786085,CLUNY,Pete's Budz,"Huyzer, Katherine Norma, Mgr
 ",4/26/2024,105 2 ST,,AB,T0J 0S0,4033242839.0,No 
 801883,COALDALE,Boxcar Bud Supply,"Mail, Eli Samuel, Mgr
-",5/27/2024,1908 18 STREET,,AB,T1M 1M7,4034051671.0,Yes
+",5/8/2024,1908 18 STREET,,AB,T1M 1M7,4034051671.0,Yes
 784614,COALHURST,Urban Leaf,"Kruger, Margaret Isabell, Mgr
 ",10/31/2022,102 SPRUCE DRIVE,,AB,T0L 0V0,8253993395.0,No 
 807510,COCHRANE,Canna Cabana,"Wheeler, Ethan James, Mgr
@@ -568,8 +568,6 @@ Authorization Number,Site City Name,Establishment Name,Manager Name,Initial Effe
 ",10/26/2023,C-5725 50 AVENUE,,AB,T7A 1J9,7809513732.0,No 
 778895,DRAYTON VALLEY,F & L Cannabis Inc.,"Fertig, Stephan Marvin Wayne, Mgr
 ",7/22/2019,5521 53 AVENUE,,AB,T7A 1R8,7806210420.0,No 
-810449,DRAYTON VALLEY,Mixers Cannabis,"Park, Moonsoo, Mgr
-",5/5/2025,B-5236 50 STREET,,AB,T7A 1S4,6395370167.0,No 
 301612,DRAYTON VALLEY,Noble Growth Corp.,,8/18/2021,5630 56 STREET,,AB,T7A 0B2,5878420669.0,No 
 779531,DRAYTON VALLEY,Spiritleaf - Drayton Valley,"Mohn, Wanda Lee, Mgr
 ",8/29/2019,1-5105 50 STREET,,AB,T7A 1J7,7805144006.0,Yes
@@ -772,7 +770,6 @@ Authorization Number,Site City Name,Establishment Name,Manager Name,Initial Effe
 ",2/10/2026,10946 23 AVE NW,,AB,T6J 7J9,5874632011.0,No 
 819775,EDMONTON,Lux Leaf Cannabis - SouthPark,"Seelen, Kale Joseph Alexander, Mgr
 ",2/10/2026,3908 GATEWAY BLVD NW,,AB,T6J 7A9,7804501990.0,No 
-301794,EDMONTON,"Mantra Cannabis, Chill'em",,4/7/2022,708 MASSSEY WAY NW,,AB,T6R 3S6,7809089068.0,No 
 781775,EDMONTON,Mind-Full,"Hollingsworth, Norman Arthur, Mgr
 ",10/8/2020,10430 118 AVE NW,,AB,T5G 0P7,7807053250.0,Yes
 783674,EDMONTON,Mountain Standard Cannabis,"Martel, Curtis John, Mgr
@@ -806,13 +803,13 @@ Authorization Number,Site City Name,Establishment Name,Manager Name,Initial Effe
 ",9/10/2019,14130 28 AVE SW,,AB,T6W 3Y9,5874141199.0,No 
 784136,EDMONTON,Plantlife,"Scott, Ian Hardie, Mgr
 ",6/29/2022,10328 103 ST NW,,AB,T5J 0Y9,7804900256.0,Yes
+785346,EDMONTON,Plantlife,"Scott, Ian Hardie, Mgr
+",6/23/2023,17324 HILLER RD SW,,AB,T6W 4H3,5874904699.0,No 
+784171,EDMONTON,Plantlife,,6/10/2022,6639 25 AVE SW,,AB,T6X 2Z3,7806131826.0,No 
 781098,EDMONTON,Plantlife,"Scott, Ian Hardie, Mgr
 ",6/15/2020,104-2217 101 ST NW,,AB,T6N 0B8,5875234433.0,Yes
 781038,EDMONTON,Plantlife,"Scott, Ian Hardie, Mgr
 ",11/1/2019,9776-9530 170 STREET NW,,AB,T5T 5L9,7804440152.0,Yes
-785346,EDMONTON,Plantlife,"Scott, Ian Hardie, Mgr
-",6/23/2023,17324 HILLER RD SW,,AB,T6W 4H3,5874904699.0,No 
-784171,EDMONTON,Plantlife,,6/10/2022,6639 25 AVE SW,,AB,T6X 2Z3,7806131826.0,No 
 781093,EDMONTON,Plantlife,"Scott, Ian Hardie, Mgr
 ",11/1/2019,10185 186 ST NW,,AB,T5S 0G5,7804540537.0,No 
 782144,EDMONTON,Plantlife,"Scott, Ian Hardie, Mgr
@@ -930,12 +927,12 @@ Authorization Number,Site City Name,Establishment Name,Manager Name,Initial Effe
 ",9/1/2021,3725 118 AVE NW,,AB,T5W 0Z3,7807619253.0,No 
 783743,EDMONTON,Wake N' Bake Cannabis,"Aggarwal, Amit, Mgr
 ",4/19/2022,16624 109 AVE NW,,AB,T5P 1C2,7807619253.0,No 
+785662,EDMONTON,Wake N' Bake Cannabis,"Aggarwal, Amit, Mgr
+",11/24/2023,101-16761 91 ST NW,,AB,T5Z 2X4,7807619253.0,No 
 782396,EDMONTON,Wake N' Bake Cannabis,"Aggarwal, Amit, Mgr
 ",6/16/2021,6937 ELLERSLIE RD SW,,AB,T6X 2A1,7807619253.0,No 
 783330,EDMONTON,Wake N' Bake Cannabis,"Aggarwal, Amit, Mgr
 ",12/16/2021,1091 KNOTTWOOD ROAD EAST  NW,,AB,T6K 3N5,7807619253.0,No 
-785662,EDMONTON,Wake N' Bake Cannabis,"Aggarwal, Amit, Mgr
-",11/24/2023,101-16761 91 ST NW,,AB,T5Z 2X4,7807619253.0,No 
 783744,EDMONTON,Wake N' Bake Cannabis,"Aggarwal, Amit, Mgr
 ",3/22/2022,858 119 STREET SW,,AB,T6W 0J1,7807619253.0,No 
 814464,EDMONTON INTERNATIONAL AIRPORT,Spiritleaf - Airpoint,"Sanderson, Grant Leigh, Mgr
@@ -1035,10 +1032,10 @@ Authorization Number,Site City Name,Establishment Name,Manager Name,Initial Effe
 ",2/12/2021,102-8200 100 ST,,AB,T8V 6H7,7805328334.0,Yes
 800740,GRANDE PRAIRIE,One Plant Grande Prairie,"Serruya, Aaron, Mgr
 ",12/17/2024,105-9925 114TH AVE,,AB,T8V 4A9,7805332243.0,No 
-783970,GRANDE PRAIRIE,Plantlife,"Scott, Ian Hardie, Mgr
-",5/4/2022,111-9824 92 ST,,AB,T8X 0E7,5872020434.0,No 
 780991,GRANDE PRAIRIE,Plantlife,"Scott, Ian Hardie, Mgr
 ",9/10/2019,103-11535 WESTGATE DR,,AB,T8V 3B1,5878525595.0,No 
+783970,GRANDE PRAIRIE,Plantlife,"Scott, Ian Hardie, Mgr
+",5/4/2022,111-9824 92 ST,,AB,T8X 0E7,5872020434.0,No 
 777982,GRANDE PRAIRIE,URBN Leaf Cannabis Company Hillside,"Ruether, Craig Thomas, Mgr
 ",7/8/2019,107-9320 100 AVE,,AB,T8V 0S7,7805323133.0,No 
 785476,GRANDE PRAIRIE,URBN Leaf Cannabis Company Swanavon,"Ruether, Craig Thomas, Mgr
@@ -1107,8 +1104,6 @@ Authorization Number,Site City Name,Establishment Name,Manager Name,Initial Effe
 ",3/11/2021,5-724 CENTRE ST NE,,AB,T0J 1X1,4039549333.0,No 
 782205,LEDUC,Canna Cabana,"Wheeler, Ethan James, Mgr
 ",11/18/2020,103-6207 50 ST,,AB,T9E 7A9,7807690313.0,Yes
-803740,LEDUC,Euphora Brands,"Abba, Nahid Badrudin, Mgr
-",6/13/2024,3498 63 AVE,,AB,T9E 0R8,,No 
 782354,LEDUC,Firestone Cannabis,"Lojczyc, Brett Nathan, Mgr
 ",1/18/2021,4-5310 DISCOVERY WAY,,AB,T9E 8L9,7806121947.0,No 
 778532,LEDUC,Grass Roots,"Mitchell, Lorena Dawn, Mgr
@@ -1156,8 +1151,6 @@ Authorization Number,Site City Name,Establishment Name,Manager Name,Initial Effe
 ",9/9/2020,20-10 AQUITANIA BLVD W,,AB,T1J 5L4,4033272005.0,No 
 779148,LLOYDMINSTER,Canna Cabana,"Jimenez, Jan Michael A, Mgr
 ",7/15/2019,105A-8120 44 ST,,AB,T9V 3R8,7808746988.0,Yes
-780667,LLOYDMINSTER,Cannabis Factory,"Dhillon, Jaskirat Kaur, Mgr
-",4/6/2020,101B-5006 18 ST,,AB,T9V 1V4,7808741171.0,No 
 808554,LLOYDMINSTER,Greenway,"McCoy, Ian Trevor, Mgr
 ",5/22/2025,2-5702 44 ST,,AB,T9V 0B6,5876023332.0,No 
 780986,LLOYDMINSTER,Plantlife,"Scott, Ian Hardie, Mgr
@@ -1380,10 +1373,10 @@ Authorization Number,Site City Name,Establishment Name,Manager Name,Initial Effe
 ",7/16/2024,532A-31-26323 TOWNSHIP RD,,AB,T7X 4M1,7809408480.0,No 
 780785,SPRUCE GROVE,Fire & Flower Cannabis Co.,"Mail, Eli Samuel, Mgr
 ",12/16/2019,214-10 WESTWIND DR,,AB,T7X 0Y5,5874610428.0,Yes
-805641,SPRUCE GROVE,Lucid Cannabis,"Mail, Eli Samuel, Mgr
-",8/21/2024,25A-100 KING ST,,AB,T7X 0J6,7805710047.0,Yes
 805647,SPRUCE GROVE,Lucid Cannabis,"Mail, Eli Samuel, Mgr
 ",8/21/2024,104-8 MCLEOD AVE,,AB,T7X 3X3,5872860110.0,Yes
+805641,SPRUCE GROVE,Lucid Cannabis,"Mail, Eli Samuel, Mgr
+",8/21/2024,25A-100 KING ST,,AB,T7X 0J6,7805710047.0,Yes
 815929,SPRUCE GROVE,One Plant Spruce Grove,"Serruya, Aaron, Mgr
 ",2/2/2026,112-131 CENTURY CROSS,,AB,T7X 0C8,5874613950.0,No 
 785704,SPRUCE GROVE,Pioneer Cannabis,"Dhillon, Amarjeetsingh Gurudayalsingh, Mgr

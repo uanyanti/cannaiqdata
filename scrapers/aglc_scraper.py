@@ -35,6 +35,12 @@ def download_aglc_data():
         # Filter Calgary only
         df_calgary = df[df['Site City Name'] == 'CALGARY']
         print(f"Calgary stores: {len(df_calgary)}")
+
+        # Filter Edmonton
+        df_edmonton = df[df['Site City Name'] == 'EDMONTON']
+        print(f"Edmonton stores: {len(df_edmonton)}")
+        df_edmonton.to_csv("../data/edmonton_stores.csv", index=False)
+        print("Edmonton data saved to edmonton_stores.csv")
         
         # Save Alberta data
         df_alberta.to_csv("../data/alberta_stores.csv", index=False)

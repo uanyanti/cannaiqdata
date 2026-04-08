@@ -1,0 +1,4 @@
+neighbourhood,store_count,avg_rating,total_reviews,avg_reviews,saturation_score,opportunity_score
+Downtown,1,4.4,122,122.0,0.1,10.0
+SW,9,4.32,1152,128.0,1.0,9.7
+NW,87,4.24,13314,153.0344827586207,10.0,1.0
