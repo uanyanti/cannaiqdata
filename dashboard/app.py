@@ -35,6 +35,26 @@ html, body, [class*="css"] {
     background-color: #080d08 !important;
     color: #f0f0f0 !important;
 }
+/* Force dark background on all Streamlit containers */
+.stApp {
+    background-color: #080d08 !important;
+}
+.stApp > header {
+    background-color: #080d08 !important;
+}
+section[data-testid="stSidebar"] {
+    background-color: #0a0f0a !important;
+}
+.main {
+    background-color: #080d08 !important;
+}
+[data-testid="stAppViewContainer"] {
+    background-color: #080d08 !important;
+}
+[data-testid="stHeader"] {
+    background-color: #080d08 !important;
+}
+
 
 /* Main container — centered */
 .main .block-container {
