@@ -89,8 +89,8 @@ def show_payment_page():
                             }],
                             mode="subscription",
                             customer_email=email,
-                            success_url="https://cannaiqdata.ca?subscribed=true",
-                            cancel_url="https://cannaiqdata.ca?cancelled=true",
+                            success_url="https://dashboard.cannaiqdata.ca?subscribed=true",
+                            cancel_url="https://dashboard.cannaiqdata.ca?cancelled=true",
                         )
                         st.success("Your secure checkout is ready!")
                         st.markdown(f"""

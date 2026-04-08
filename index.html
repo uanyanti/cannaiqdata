@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:title" content="CannaIQ — Cannabis Market Intelligence">
+<meta property="og:description" content="Know exactly where to open, where to avoid, and what's coming next in the Alberta cannabis market.">
+<meta property="og:url" content="https://cannaiqdata.ca">
+<meta property="og:type" content="website">
+<meta name="description" content="Real-time cannabis market intelligence for Alberta operators and investors. Store saturation scores, opportunity maps, and live market alerts.">
+<title>CannaIQ — Cannabis Market Intelligence</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #080d08; color: #f0f0f0; }
+a { text-decoration: none; }
+.container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+nav { border-bottom: 1px solid #1a2e1a; padding: 18px 0; }
+.nav-inner { max-width: 860px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 22px; font-weight: 800; color: #4CAF50; letter-spacing: -0.5px; }
+.logo span { color: #f0f0f0; }
+.nav-btn { background: #2E7D32; color: white; padding: 10px 22px; border-radius: 22px; font-size: 14px; font-weight: 600; transition: background 0.2s; }
+.nav-btn:hover { background: #388E3C; }
+.hero { padding: 90px 0 70px; text-align: center; }
+.badge { display: inline-flex; align-items: center; gap: 8px; background: #0f1a0f; color: #4CAF50; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 28px; border: 1px solid #1e3a1e; }
+.dot { width: 7px; height: 7px; background: #4CAF50; border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+h1 { font-size: 52px; font-weight: 800; line-height: 1.1; margin-bottom: 22px; letter-spacing: -1px; }
+h1 span { color: #4CAF50; }
+.hero-sub { font-size: 18px; color: #999; line-height: 1.65; max-width: 560px; margin: 0 auto 36px; }
+.btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.btn-p { background: #2E7D32; color: white; padding: 14px 32px; border-radius: 28px; font-size: 15px; font-weight: 700; border: 2px solid #2E7D32; transition: all 0.2s; }
+.btn-p:hover { background: #388E3C; border-color: #388E3C; }
+.btn-s { background: transparent; color: #4CAF50; padding: 14px 32px; border-radius: 28px; font-size: 15px; font-weight: 700; border: 2px solid #2E7D32; transition: all 0.2s; }
+.btn-s:hover { background: #0f1a0f; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 56px 0; }
+.stat { background: #0f1a0f; border: 1px solid #1a2e1a; border-radius: 14px; padding: 24px 16px; text-align: center; }
+.stat-n { font-size: 38px; font-weight: 800; color: #4CAF50; line-height: 1; }
+.stat-l { font-size: 12px; color: #666; margin-top: 8px; line-height: 1.4; }
+.section { margin: 64px 0; }
+.section-tag { font-size: 11px; font-weight: 700; color: #4CAF50; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+.section-title { font-size: 32px; font-weight: 800; margin-bottom: 32px; letter-spacing: -0.5px; }
+.decisions { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.dc { border-radius: 18px; padding: 32px; text-align: center; }
+.dc.open { background: #1B5E20; }
+.dc.avoid { background: #7f0000; }
+.dc-tag { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; opacity: 0.75; margin-bottom: 10px; }
+.dc-area { font-size: 26px; font-weight: 800; margin-bottom: 10px; }
+.dc-desc { font-size: 14px; opacity: 0.8; margin-bottom: 14px; }
+.dc-badge { display: inline-block; background: rgba(255,255,255,0.15); padding: 5px 14px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+.alerts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ac { background: #0f1a0f; border-radius: 14px; padding: 22px; border-left: 4px solid; }
+.ac.red { border-color: #FF5252; }
+.ac.orange { border-color: #FFA500; }
+.ac-title { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+.ac.red .ac-title { color: #FF5252; }
+.ac.orange .ac-title { color: #FFA500; }
+.ac-body { font-size: 14px; color: #ccc; margin-bottom: 8px; line-height: 1.5; }
+.ac-time { font-size: 11px; color: #555; }
+.alert-lock { background: #0f1a0f; border: 1px solid #1a2e1a; border-radius: 12px; padding: 14px 20px; text-align: center; margin-top: 14px; color: #777; font-size: 13px; }
+.alert-lock strong { color: #4CAF50; }
+.features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.fc { background: #0f1a0f; border: 1px solid #1a2e1a; border-radius: 14px; padding: 24px; }
+.fc-icon { font-size: 24px; margin-bottom: 14px; }
+.fc-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: #f0f0f0; }
+.fc-desc { font-size: 13px; color: #777; line-height: 1.6; }
+.pricing-wrap { background: #0f1a0f; border: 2px solid #2E7D32; border-radius: 24px; padding: 48px 40px; text-align: center; }
+.price-name { font-size: 14px; color: #888; font-weight: 600; margin-bottom: 16px; }
+.price-amount { font-size: 60px; font-weight: 800; color: #4CAF50; line-height: 1; }
+.price-period { font-size: 16px; color: #666; margin-bottom: 32px; margin-top: 4px; }
+.price-features { list-style: none; text-align: left; margin-bottom: 32px; border-top: 1px solid #1a2e1a; padding-top: 24px; }
+.price-features li { padding: 10px 0; border-bottom: 1px solid #1a2e1a; font-size: 14px; color: #ccc; display: flex; align-items: center; gap: 12px; }
+.price-features li:last-child { border-bottom: none; }
+.ck { color: #4CAF50; font-size: 15px; }
+.soon { color: #555; font-size: 11px; margin-left: auto; }
+.price-btn { display: block; background: #2E7D32; color: white; padding: 16px; border-radius: 28px; font-size: 17px; font-weight: 700; transition: all 0.2s; }
+.price-btn:hover { background: #388E3C; }
+.price-note { font-size: 12px; color: #555; margin-top: 14px; }
+.cta-wrap { background: #0f1a0f; border: 1px solid #1a2e1a; border-radius: 24px; padding: 60px 40px; text-align: center; margin: 64px 0; }
+.cta-wrap h2 { font-size: 36px; font-weight: 800; margin-bottom: 16px; letter-spacing: -0.5px; }
+.cta-wrap p { font-size: 16px; color: #888; margin-bottom: 36px; }
+footer { border-top: 1px solid #1a2e1a; padding: 32px 0; text-align: center; }
+.footer-inner { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+.footer-logo { font-size: 18px; font-weight: 800; color: #4CAF50; margin-bottom: 12px; }
+.footer-logo span { color: #f0f0f0; }
+.footer-text { font-size: 12px; color: #444; line-height: 1.8; }
+.footer-text a { color: #555; }
+@media (max-width: 640px) {
+  h1 { font-size: 34px; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .decisions { grid-template-columns: 1fr; }
+  .alerts-grid { grid-template-columns: 1fr; }
+  .features-grid { grid-template-columns: 1fr 1fr; }
+  .pricing-wrap { padding: 32px 20px; }
+  .cta-wrap { padding: 40px 20px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">Canna<span>IQ</span></div>
+    <a href="https://dashboard.cannaiqdata.ca" class="nav-btn">Launch Dashboard</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class="hero">
+    <div class="badge"><div class="dot"></div> LIVE — ALBERTA CANNABIS INTELLIGENCE</div>
+    <h1>Know exactly <span>where to win</span><br>in the cannabis market</h1>
+    <p class="hero-sub">Real-time intelligence on store saturation, opportunity scores, and market signals — built for Alberta cannabis operators and investors.</p>
+    <div class="btns">
+      <a href="https://dashboard.cannaiqdata.ca" class="btn-p">View Free Preview</a>
+      <a href="https://dashboard.cannaiqdata.ca" class="btn-s">Get Full Access — $199/mo</a>
+    </div>
+  </section>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-n">794</div><div class="stat-l">Alberta stores tracked</div></div>
+    <div class="stat"><div class="stat-n">196</div><div class="stat-l">Calgary stores analyzed</div></div>
+    <div class="stat"><div class="stat-n">33</div><div class="stat-l">Postal codes scored</div></div>
+    <div class="stat"><div class="stat-n">15</div><div class="stat-l">New stores last 6 months</div></div>
+  </div>
+
+  <section class="section">
+    <div class="section-tag">What you should do right now</div>
+    <div class="section-title">Instant market decisions</div>
+    <div class="decisions">
+      <div class="dc open">
+        <div class="dc-tag">BEST AREA TO OPEN</div>
+        <div class="dc-area">Downtown Calgary</div>
+        <div class="dc-desc">Lowest competition in the city right now</div>
+        <div class="dc-badge">#1 Opportunity in Calgary</div>
+      </div>
+      <div class="dc avoid">
+        <div class="dc-tag">AVOID THESE AREAS</div>
+        <div class="dc-area">SW & SE Calgary</div>
+        <div class="dc-desc">Highest store density — hardest to compete</div>
+        <div class="dc-badge">High risk — avoid new entry</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-tag">Live market alerts</div>
+    <div class="section-title">Real-time signals</div>
+    <div class="alerts-grid">
+      <div class="ac red">
+        <div class="ac-title">New License Application</div>
+        <div class="ac-body">New cannabis store application filed in NE Calgary</div>
+        <div class="ac-time">2 days ago · AGLC Registry</div>
+      </div>
+      <div class="ac orange">
+        <div class="ac-title">Saturation Alert</div>
+        <div class="ac-body">SW Calgary reached maximum saturation threshold</div>
+        <div class="ac-time">Updated today · CannaIQ Analysis</div>
+      </div>
+    </div>
+    <div class="alert-lock">
+      <strong>Premium subscribers</strong> get real-time alerts for new applications, competitor openings, and saturation changes
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-tag">What's included</div>
+    <div class="section-title">Everything you need to win</div>
+    <div class="features-grid">
+      <div class="fc">
+        <div class="fc-icon">&#x1F5FA;</div>
+        <div class="fc-title">Interactive store map</div>
+        <div class="fc-desc">Every licensed store plotted and colour-coded by performance rating.</div>
+      </div>
+      <div class="fc">
+        <div class="fc-icon">&#x1F4EE;</div>
+        <div class="fc-title">Postal code intelligence</div>
+        <div class="fc-desc">33 Calgary postal codes ranked by opportunity and saturation.</div>
+      </div>
+      <div class="fc">
+        <div class="fc-icon">&#x1F6A8;</div>
+        <div class="fc-title">Live market alerts</div>
+        <div class="fc-desc">New license applications and competitor openings as they happen.</div>
+      </div>
+      <div class="fc">
+        <div class="fc-icon">&#x1F3C6;</div>
+        <div class="fc-title">Competitive landscape</div>
+        <div class="fc-desc">See who dominates each area and where the gaps are.</div>
+      </div>
+      <div class="fc">
+        <div class="fc-icon">&#x1F4CA;</div>
+        <div class="fc-title">Opportunity scores</div>
+        <div class="fc-desc">Every area scored 1-10 based on real market signals.</div>
+      </div>
+      <div class="fc">
+        <div class="fc-icon">&#x1F30D;</div>
+        <div class="fc-title">Canada expansion</div>
+        <div class="fc-desc">Edmonton and Vancouver data coming soon.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-tag">Pricing</div>
+    <div class="section-title">Simple, transparent pricing</div>
+    <div class="pricing-wrap">
+      <div class="price-name">CannaIQ Starter</div>
+      <div class="price-amount">$199</div>
+      <div class="price-period">per month CAD · Cancel anytime</div>
+      <ul class="price-features">
+        <li><span class="ck">&#x2713;</span> Full Calgary market intelligence dashboard</li>
+        <li><span class="ck">&#x2713;</span> Interactive store map — 124 stores plotted</li>
+        <li><span class="ck">&#x2713;</span> Postal code analysis — 33 areas scored</li>
+        <li><span class="ck">&#x2713;</span> Neighbourhood saturation + opportunity scores</li>
+        <li><span class="ck">&#x2713;</span> Updated daily</li>
+        <li><span class="ck">&#x2713;</span> New store alerts</li>
+        <li><span class="ck" style="color:#333">&#x2713;</span> Edmonton data <span class="soon">coming soon</span></li>
+        <li><span class="ck" style="color:#333">&#x2713;</span> Predictive analytics <span class="soon">coming soon</span></li>
+      </ul>
+      <a href="https://dashboard.cannaiqdata.ca" class="price-btn">Get Full Access Now</a>
+      <div class="price-note">Secured by Stripe · No hidden fees · Cancel anytime</div>
+    </div>
+  </section>
+
+  <div class="cta-wrap">
+    <h2>Ready to get the edge?</h2>
+    <p>Join cannabis operators and investors already using CannaIQ to make smarter decisions.</p>
+    <div class="btns">
+      <a href="https://dashboard.cannaiqdata.ca" class="btn-p">View Free Preview</a>
+      <a href="mailto:hello@cannaiqdata.ca" class="btn-s">Contact Us</a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Canna<span>IQ</span></div>
+    <div class="footer-text">
+      Data sources: AGLC · Health Canada · Google Maps signals<br>
+      &copy; 2026 CannaIQ &middot; <a href="mailto:hello@cannaiqdata.ca">hello@cannaiqdata.ca</a> &middot; cannaiqdata.ca
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

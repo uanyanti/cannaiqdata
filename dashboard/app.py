@@ -13,6 +13,16 @@ st.set_page_config(
     layout="wide"
 )
 
+# Custom meta tags for link previews
+st.markdown("""
+    <head>
+        <meta property="og:title" content="CannaIQ - Cannabis Market Intelligence"/>
+        <meta property="og:description" content="Calgary cannabis market intelligence — saturation scores, opportunity maps, and store analytics."/>
+        <meta property="og:url" content="https://cannaiqdata.ca"/>
+        <meta property="og:type" content="website"/>
+    </head>
+""", unsafe_allow_html=True)
+
 # CSS
 st.markdown("""
 <style>
