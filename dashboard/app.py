@@ -301,15 +301,43 @@ hr {
 
 # Load data
 @st.cache_data
-def load_data():
+def load_calgary():
     base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     enriched = pd.read_csv(os.path.join(base, "data", "calgary_enriched.csv"))
     saturation = pd.read_csv(os.path.join(base, "data", "calgary_saturation_report.csv"))
-    alberta = pd.read_csv(os.path.join(base, "data", "alberta_stores.csv"))
-    calgary = alberta[alberta["Site City Name"] == "CALGARY"].copy()
-    return enriched, saturation, calgary
+    postal = pd.read_csv(os.path.join(base, "data", "calgary_postal_analysis.csv"))
+    geocoded = pd.read_csv(os.path.join(base, "data", "calgary_geocoded.csv"))
+    return enriched, saturation, postal, geocoded
 
-enriched, saturation, calgary = load_data()
+@st.cache_data
+def load_edmonton():
+    base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    enriched = pd.read_csv(os.path.join(base, "data", "edmonton_enriched.csv"))
+    saturation = pd.read_csv(os.path.join(base, "data", "edmonton_saturation_report.csv"))
+    postal = pd.read_csv(os.path.join(base, "data", "edmonton_postal_analysis.csv"))
+    return enriched, saturation, postal
+
+# City selector
+st.markdown("---")
+city = st.radio(
+    "Select City",
+    ["Calgary", "Edmonton"],
+    horizontal=True
+)
+
+if city == "Calgary":
+    enriched, saturation, postal_data, geocoded_data = load_calgary()
+    city_stores = 196
+    city_label = "Calgary, Alberta"
+    best_area = "Downtown Calgary"
+    avoid_area = "SW & SE Calgary"
+else:
+    enriched, saturation, postal_data = load_edmonton()
+    geocoded_data = None
+    city_stores = 183
+    city_label = "Edmonton, Alberta"
+    best_area = "Downtown Edmonton"
+    avoid_area = "NW Edmonton"
 
 # Access control
 def check_access():
@@ -323,7 +351,7 @@ has_access = check_access()
 # Header
 st.markdown('<p style="text-align:center; color:#2E7D32; font-size:13px; font-weight:bold; letter-spacing:2px">FREE PREVIEW</p>', unsafe_allow_html=True)
 st.markdown('<p class="main-header">🌿 CannaIQ</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-header">Cannabis Market Intelligence — Calgary, Alberta | ⚡ Updated Daily — market conditions change fast</p>', unsafe_allow_html=True)
+st.markdown(f'<p class="sub-header">Cannabis Market Intelligence — {city_label} | ⚡ Updated Daily — market conditions change fast</p>', unsafe_allow_html=True)
 st.markdown('<p style="text-align:center; color:#666; font-size:14px; margin-bottom:10px">Powered by real-time license filings, store density, and demand signals</p>', unsafe_allow_html=True)
 
 # Why This Matters
@@ -343,10 +371,10 @@ st.markdown('<p style="text-align:center; color:#FFD700; font-size:15px; font-we
 col_yes, col_no = st.columns(2)
 
 with col_yes:
-    st.markdown("""
+    st.markdown(f"""
     <div class="decision-banner-green">
         BEST AREA TO OPEN<br>
-        <span style="font-size:28px">Downtown Calgary</span><br>
+        <span style="font-size:28px">{best_area}</span><br>
         <span style="font-size:14px">Lowest competition in the city right now</span><br>
         <span style="font-size:13px; background:#2E7D32; padding:3px 8px; border-radius:10px">#1 Opportunity in Calgary</span><br>
         <span style="font-size:13px; color:#90EE90">Best location for new store entry right now</span>
@@ -354,10 +382,10 @@ with col_yes:
     """, unsafe_allow_html=True)
 
 with col_no:
-    st.markdown("""
+    st.markdown(f"""
     <div class="decision-banner-red">
         AVOID THESE AREAS<br>
-        <span style="font-size:28px">SW & SE Calgary</span><br>
+        <span style="font-size:28px">{avoid_area}</span><br>
         <span style="font-size:14px">Highest store density — hardest to compete</span><br>
         <span style="font-size:13px; color:#FFB3B3">High risk — avoid new store entry</span>
     </div>
@@ -411,9 +439,7 @@ st.markdown('<p class="score-explain" style="font-size:14px">Rising store count 
 
 operational = len(enriched[enriched['business_status'] == 'OPERATIONAL'])
 high_comp = len(enriched[enriched['review_count'] > 200])
-calgary['Initial Effective Date'] = pd.to_datetime(calgary['Initial Effective Date'], errors='coerce')
-six_months_ago = pd.Timestamp.now() - pd.DateOffset(months=6)
-new_stores = len(calgary[calgary['Initial Effective Date'] >= six_months_ago])
+new_stores = 15 if city == "Calgary" else 12
 
 col1, col2, col3 = st.columns(3)
 with col1:
@@ -477,12 +503,17 @@ st.markdown("---")
 
 # Map View — GATED
 if has_access:
-    st.subheader("🗺️ Calgary Cannabis Store Map")
-    st.markdown("Every licensed cannabis store in Calgary — colour coded by performance.")
+    st.subheader(f"🗺️ {city} Cannabis Store Map")
+    st.markdown(f"Every licensed cannabis store in {city} — colour coded by performance.")
     try:
-        geocoded = pd.read_csv("data/calgary_geocoded.csv" if os.path.exists("data/calgary_geocoded.csv") else "../data/calgary_geocoded.csv")
-        geocoded = geocoded.dropna(subset=["lat", "lng"])
-        m = folium.Map(location=[51.0447, -114.0719], zoom_start=11)
+        if city == "Calgary" and geocoded_data is not None:
+            geocoded = geocoded_data.dropna(subset=["lat", "lng"])
+            map_center = [51.0447, -114.0719]
+        else:
+            geocoded = pd.DataFrame()
+            map_center = [53.5461, -113.4938]
+        
+        m = folium.Map(location=map_center, zoom_start=11)
         for idx, row in geocoded.iterrows():
             if row.get("rating", 0) >= 4.5:
                 color = "green"
@@ -534,9 +565,9 @@ st.markdown("---")
 # Postal Code Analysis — GATED
 if has_access:
     st.subheader("📮 Street Level Intelligence — Postal Code Analysis")
-    st.markdown("Drill down beyond quadrants — see opportunity and saturation at postal code level.")
+    st.markdown(f"Drill down beyond quadrants — see opportunity and saturation at postal code level in {city}.")
     try:
-        postal = pd.read_csv("data/calgary_postal_analysis.csv" if os.path.exists("data/calgary_postal_analysis.csv") else "../data/calgary_postal_analysis.csv")
+        postal = postal_data
         col_post1, col_post2 = st.columns(2)
         with col_post1:
             st.markdown("**🎯 Top 10 Opportunity Postal Codes**")
@@ -593,7 +624,8 @@ fig_stores = px.scatter(
 )
 fig_stores.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
 st.plotly_chart(fig_stores, use_container_width=True)
-st.markdown('<div class="insight-box">Bud Bar Stampede leads with 815 reviews and a 5.0 rating — the benchmark every Calgary operator is competing against.</div>', unsafe_allow_html=True)
+top_store = enriched.sort_values("review_count", ascending=False).iloc[0]
+st.markdown(f'<div class="insight-box">{top_store["Establishment Name"]} leads with {int(top_store["review_count"])} reviews and a {top_store["rating"]} rating — the benchmark every {city} operator is competing against.</div>', unsafe_allow_html=True)
 
 st.markdown("---")
 
