@@ -26,93 +26,230 @@ st.markdown("""
 # CSS
 st.markdown("""
 <style>
-@media (max-width: 768px) {
-    .main-header { font-size: 28px !important; }
-    .sub-header { font-size: 13px !important; }
-    .decision-banner-green { font-size: 14px !important; padding: 15px !important; }
-    .decision-banner-red { font-size: 14px !important; padding: 15px !important; }
-    .why-matters { font-size: 14px !important; padding: 15px !important; }
-    .cta-box { padding: 20px !important; }
-    .cta-box h2 { font-size: 20px !important; }
-    .cta-box p { font-size: 14px !important; }
+/* Import */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* Global */
+html, body, [class*="css"] {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    background-color: #080d08 !important;
+    color: #f0f0f0 !important;
 }
+
+/* Main container — centered */
+.main .block-container {
+    max-width: 900px !important;
+    padding: 2rem 1.5rem !important;
+    margin: 0 auto !important;
+}
+
+/* Hide Streamlit elements */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
+.stDeployButton {display: none;}
+[data-testid="stToolbar"] {display: none;}
+
+/* Metrics */
+[data-testid="metric-container"] {
+    background: #0f1a0f !important;
+    border: 1px solid #1a2e1a !important;
+    border-radius: 14px !important;
+    padding: 20px !important;
+}
+[data-testid="metric-container"] label {
+    color: #666 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+}
+[data-testid="metric-container"] [data-testid="stMetricValue"] {
+    color: #4CAF50 !important;
+    font-size: 36px !important;
+    font-weight: 800 !important;
+}
+
+/* Headings */
+h1, h2, h3 {
+    color: #f0f0f0 !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.5px !important;
+}
+
+/* Subheaders */
+[data-testid="stMarkdownContainer"] h3 {
+    font-size: 24px !important;
+    font-weight: 800 !important;
+    margin-bottom: 8px !important;
+}
+
+/* Dataframe */
+[data-testid="stDataFrame"] {
+    background: #0f1a0f !important;
+    border: 1px solid #1a2e1a !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+}
+
+/* Buttons */
+[data-testid="stButton"] button {
+    background: #2E7D32 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 28px !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
+    padding: 12px 32px !important;
+    transition: all 0.2s !important;
+}
+[data-testid="stButton"] button:hover {
+    background: #388E3C !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Select box */
+[data-testid="stSelectbox"] > div {
+    background: #0f1a0f !important;
+    border: 1px solid #1a2e1a !important;
+    border-radius: 12px !important;
+    color: #f0f0f0 !important;
+}
+
+/* Slider */
+[data-testid="stSlider"] {
+    padding: 8px 0 !important;
+}
+.stSlider [data-baseweb="slider"] div {
+    background: #2E7D32 !important;
+}
+
+/* Text input */
+[data-testid="stTextInput"] input {
+    background: #0f1a0f !important;
+    border: 1px solid #1a2e1a !important;
+    border-radius: 12px !important;
+    color: #f0f0f0 !important;
+    padding: 12px 16px !important;
+}
+
+/* Divider */
+hr {
+    border-color: #1a2e1a !important;
+    margin: 32px 0 !important;
+}
+
+/* Plotly charts background */
+.js-plotly-plot {
+    background: transparent !important;
+}
+
+/* Streamlit tabs if used */
+[data-testid="stTab"] {
+    background: #0f1a0f !important;
+    border-radius: 12px !important;
+}
+
+/* Success/error/info boxes */
+[data-testid="stAlert"] {
+    background: #0f1a0f !important;
+    border: 1px solid #1a2e1a !important;
+    border-radius: 12px !important;
+    color: #f0f0f0 !important;
+}
+
+/* Sidebar if ever used */
+[data-testid="stSidebar"] {
+    background: #0a0f0a !important;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .main .block-container {
+        padding: 1rem !important;
+    }
+}
+
+/* Custom classes */
 .main-header {
-    font-size: 48px;
-    font-weight: bold;
-    color: #2E7D32;
+    font-size: 42px;
+    font-weight: 800;
+    color: #4CAF50;
     text-align: center;
-    padding: 10px;
+    padding: 10px 0;
+    letter-spacing: -1px;
 }
 .sub-header {
-    font-size: 18px;
+    font-size: 16px;
     color: #888;
     text-align: center;
     margin-bottom: 10px;
 }
 .decision-banner-green {
-    background-color: #1B5E20;
-    padding: 20px;
-    border-radius: 12px;
+    background: #1B5E20;
+    padding: 28px 24px;
+    border-radius: 18px;
     text-align: center;
     color: white;
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 18px;
+    font-weight: 700;
     margin-bottom: 10px;
 }
 .decision-banner-red {
-    background-color: #B71C1C;
-    padding: 20px;
-    border-radius: 12px;
+    background: #7f0000;
+    padding: 28px 24px;
+    border-radius: 18px;
     text-align: center;
     color: white;
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 18px;
+    font-weight: 700;
     margin-bottom: 10px;
 }
 .insight-box {
-    background-color: #1E1E1E;
+    background: #0f1a0f;
     border-left: 4px solid #2E7D32;
-    padding: 15px;
-    border-radius: 8px;
-    color: #eee;
-    font-size: 15px;
+    padding: 16px 20px;
+    border-radius: 0 12px 12px 0;
+    color: #ccc;
+    font-size: 14px;
     margin-top: 10px;
+    line-height: 1.6;
 }
 .risk-box {
-    background-color: #3E1C1C;
+    background: #1a0a0a;
     border-left: 4px solid #FF5252;
-    padding: 15px;
-    border-radius: 8px;
-    color: #eee;
-    font-size: 15px;
+    padding: 16px 20px;
+    border-radius: 0 12px 12px 0;
+    color: #ccc;
+    font-size: 14px;
     margin-top: 10px;
+    line-height: 1.6;
 }
 .why-matters {
-    background-color: #1A237E;
-    padding: 20px;
-    border-radius: 12px;
+    background: #0f1a0f;
+    border: 1px solid #1e3a1e;
+    padding: 20px 24px;
+    border-radius: 14px;
     color: white;
     text-align: center;
-    font-size: 18px;
-    margin: 20px 0;
+    font-size: 16px;
+    margin: 16px 0;
 }
 .score-explain {
-    color: #aaa;
+    color: #666;
     font-size: 13px;
-    margin-top: 5px;
+    margin-top: 4px;
+    line-height: 1.5;
 }
 .cta-box {
-    background: linear-gradient(135deg, #2E7D32, #1B5E20);
-    padding: 30px;
-    border-radius: 16px;
+    background: #0f1a0f;
+    border: 2px solid #2E7D32;
+    padding: 40px 32px;
+    border-radius: 20px;
     text-align: center;
     color: white;
-    margin-top: 30px;
+    margin-top: 24px;
 }
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-header {visibility: hidden;}
-.stDeployButton {display: none;}
 </style>
 """, unsafe_allow_html=True)
 
