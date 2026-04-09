@@ -5,3 +5,5 @@ requests
 stripe
 Pillow
 python-dotenv
+folium
+streamlit-folium
