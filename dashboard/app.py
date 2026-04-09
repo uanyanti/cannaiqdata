@@ -6,33 +6,22 @@ from payment import show_payment_page
 import folium
 from streamlit_folium import st_folium
 
-# Page config
 st.set_page_config(
     page_title="CannaIQ - Cannabis Market Intelligence",
     page_icon="🌿",
     layout="wide"
 )
 
-# CSS
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-html, body, [class*="css"] {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
-    background-color: #080d08 !important;
-    color: #f0f0f0 !important;
-}
+html, body, [class*="css"] { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important; background-color: #080d08 !important; color: #f0f0f0 !important; }
 .stApp { background-color: #080d08 !important; }
 .stApp > header { background-color: #080d08 !important; }
-section[data-testid="stSidebar"] { background-color: #0a0f0a !important; }
 .main { background-color: #080d08 !important; }
 [data-testid="stAppViewContainer"] { background-color: #080d08 !important; }
 [data-testid="stHeader"] { background-color: #080d08 !important; }
-.main .block-container {
-    max-width: 780px !important;
-    padding: 2rem 2rem !important;
-    margin: 0 auto !important;
-}
+.main .block-container { max-width: 780px !important; padding: 2rem 2rem !important; margin: 0 auto !important; }
 p, label, span, div { color: #cccccc !important; }
 .stMarkdown p { color: #cccccc !important; }
 [data-testid="stMarkdownContainer"] p { color: #cccccc !important; }
@@ -40,70 +29,19 @@ input::placeholder { color: #666 !important; }
 [data-testid="stTextInput"] label { color: #aaaaaa !important; }
 [data-testid="stSelectbox"] label { color: #aaaaaa !important; }
 [data-testid="stSlider"] label { color: #aaaaaa !important; }
-.stCheckbox label { color: #cccccc !important; }
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-header {visibility: hidden;}
-.stDeployButton {display: none;}
-[data-testid="stToolbar"] {display: none;}
-[data-testid="metric-container"] {
-    background: #0f1a0f !important;
-    border: 1px solid #1a2e1a !important;
-    border-radius: 14px !important;
-    padding: 20px !important;
-}
-[data-testid="metric-container"] label {
-    color: #666 !important;
-    font-size: 12px !important;
-    font-weight: 600 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 1px !important;
-}
-[data-testid="metric-container"] [data-testid="stMetricValue"] {
-    color: #4CAF50 !important;
-    font-size: 36px !important;
-    font-weight: 800 !important;
-}
+#MainMenu {visibility: hidden;} footer {visibility: hidden;} header {visibility: hidden;} .stDeployButton {display: none;} [data-testid="stToolbar"] {display: none;}
+[data-testid="metric-container"] { background: #0f1a0f !important; border: 1px solid #1a2e1a !important; border-radius: 14px !important; padding: 20px !important; }
+[data-testid="metric-container"] label { color: #666 !important; font-size: 12px !important; font-weight: 600 !important; text-transform: uppercase !important; letter-spacing: 1px !important; }
+[data-testid="metric-container"] [data-testid="stMetricValue"] { color: #4CAF50 !important; font-size: 36px !important; font-weight: 800 !important; }
 h1, h2, h3 { color: #f0f0f0 !important; font-weight: 800 !important; letter-spacing: -0.5px !important; }
-[data-testid="stDataFrame"] {
-    background: #0f1a0f !important;
-    border: 1px solid #1a2e1a !important;
-    border-radius: 14px !important;
-    overflow: hidden !important;
-}
-[data-testid="stButton"] button {
-    background: #2E7D32 !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 28px !important;
-    font-weight: 700 !important;
-    font-size: 15px !important;
-    padding: 12px 32px !important;
-}
+[data-testid="stDataFrame"] { background: #0f1a0f !important; border: 1px solid #1a2e1a !important; border-radius: 14px !important; overflow: hidden !important; }
+[data-testid="stButton"] button { background: #2E7D32 !important; color: white !important; border: none !important; border-radius: 28px !important; font-weight: 700 !important; font-size: 15px !important; padding: 12px 32px !important; }
 [data-testid="stButton"] button:hover { background: #388E3C !important; }
-[data-testid="stSelectbox"] > div {
-    background: #0f1a0f !important;
-    border: 1px solid #1a2e1a !important;
-    border-radius: 12px !important;
-    color: #f0f0f0 !important;
-}
-[data-testid="stTextInput"] input {
-    background: #0f1a0f !important;
-    border: 1px solid #1a2e1a !important;
-    border-radius: 12px !important;
-    color: #f0f0f0 !important;
-    padding: 12px 16px !important;
-}
+[data-testid="stSelectbox"] > div { background: #0f1a0f !important; border: 1px solid #1a2e1a !important; border-radius: 12px !important; color: #f0f0f0 !important; }
+[data-testid="stTextInput"] input { background: #0f1a0f !important; border: 1px solid #1a2e1a !important; border-radius: 12px !important; color: #f0f0f0 !important; padding: 12px 16px !important; }
 hr { border-color: #1a2e1a !important; margin: 32px 0 !important; }
-[data-testid="stAlert"] {
-    background: #0f1a0f !important;
-    border: 1px solid #1a2e1a !important;
-    border-radius: 12px !important;
-    color: #f0f0f0 !important;
-}
-@media (max-width: 768px) {
-    .main .block-container { padding: 1rem !important; }
-}
+[data-testid="stAlert"] { background: #0f1a0f !important; border: 1px solid #1a2e1a !important; border-radius: 12px !important; color: #f0f0f0 !important; }
+@media (max-width: 768px) { .main .block-container { padding: 1rem !important; } }
 .main-header { font-size: 42px; font-weight: 800; color: #4CAF50; text-align: center; padding: 10px 0; letter-spacing: -1px; }
 .sub-header { font-size: 16px; color: #888; text-align: center; margin-bottom: 10px; }
 .decision-banner-green { background: #1B5E20; padding: 28px 24px; border-radius: 18px; text-align: center; color: white; font-size: 18px; font-weight: 700; margin-bottom: 10px; }
@@ -116,7 +54,6 @@ hr { border-color: #1a2e1a !important; margin: 32px 0 !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# Load data
 @st.cache_data
 def load_calgary():
     base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -132,9 +69,9 @@ def load_edmonton():
     enriched = pd.read_csv(os.path.join(base, "data", "edmonton_enriched.csv"))
     saturation = pd.read_csv(os.path.join(base, "data", "edmonton_saturation_report.csv"))
     postal = pd.read_csv(os.path.join(base, "data", "edmonton_postal_analysis.csv"))
-    return enriched, saturation, postal
+    geocoded = pd.read_csv(os.path.join(base, "data", "edmonton_geocoded.csv"))
+    return enriched, saturation, postal, geocoded
 
-# City selector
 st.markdown("---")
 city = st.radio("Select City", ["Calgary", "Edmonton"], horizontal=True)
 
@@ -144,15 +81,15 @@ if city == "Calgary":
     city_label = "Calgary, Alberta"
     best_area = "Downtown Calgary"
     avoid_area = "SW & SE Calgary"
+    map_center = [51.0447, -114.0719]
 else:
-    enriched, saturation, postal_data = load_edmonton()
-    geocoded_data = None
+    enriched, saturation, postal_data, geocoded_data = load_edmonton()
     city_stores = 183
     city_label = "Edmonton, Alberta"
     best_area = "Downtown Edmonton"
     avoid_area = "NW Edmonton"
+    map_center = [53.5461, -113.4938]
 
-# Access control
 def check_access():
     params = st.query_params
     if params.get("subscribed") == "true":
@@ -161,7 +98,6 @@ def check_access():
 
 has_access = check_access()
 
-# Header
 st.markdown('<p style="text-align:center; color:#2E7D32; font-size:13px; font-weight:bold; letter-spacing:2px">FREE PREVIEW</p>', unsafe_allow_html=True)
 st.markdown('<p class="main-header">🌿 CannaIQ</p>', unsafe_allow_html=True)
 st.markdown(f'<p class="sub-header">Cannabis Market Intelligence — {city_label} | ⚡ Updated Daily — market conditions change fast</p>', unsafe_allow_html=True)
@@ -175,13 +111,11 @@ st.markdown("""
 
 st.markdown("---")
 
-# Decision Banners
 st.subheader("🎯 What You Should Do Right Now")
 st.markdown('<p class="score-explain" style="font-size:15px">These recommendations are based on competition density and demand gaps.</p>', unsafe_allow_html=True)
 st.markdown('<p style="text-align:center; color:#FFD700; font-size:15px; font-weight:bold">💰 These insights can save or make you $100K+ depending on your location decision.</p>', unsafe_allow_html=True)
 
 col_yes, col_no = st.columns(2)
-
 with col_yes:
     st.markdown(f"""
     <div class="decision-banner-green">
@@ -213,12 +147,10 @@ st.markdown("""
 
 st.markdown("---")
 
-# Live Market Alerts
 st.subheader("🚨 Live Market Alerts")
 st.markdown('<p class="score-explain">Real-time signals from AGLC license filings and market activity.</p>', unsafe_allow_html=True)
 
 col_alert1, col_alert2 = st.columns(2)
-
 with col_alert1:
     st.markdown(f"""
     <div style="background:#1a1a2e; border-left:4px solid #FF5252; padding:15px; border-radius:8px; margin:5px 0">
@@ -245,7 +177,6 @@ st.markdown("""
 
 st.markdown("---")
 
-# Market Risk Overview
 st.subheader("📊 Market Risk Overview")
 st.markdown('<p class="score-explain" style="font-size:14px">Rising store count increases competition and reduces margins.</p>', unsafe_allow_html=True)
 
@@ -269,7 +200,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Charts
 left, right = st.columns(2)
 
 with left:
@@ -277,11 +207,8 @@ with left:
     st.markdown('<p class="score-explain">Score based on store density + competition signals. Higher = more saturated = higher risk.</p>', unsafe_allow_html=True)
     fig_sat = px.bar(
         saturation.sort_values("saturation_score", ascending=True),
-        x="saturation_score",
-        y="neighbourhood",
-        orientation="h",
-        color="saturation_score",
-        color_continuous_scale="RdYlGn_r",
+        x="saturation_score", y="neighbourhood", orientation="h",
+        color="saturation_score", color_continuous_scale="RdYlGn_r",
         labels={"saturation_score": "Saturation Score", "neighbourhood": "Area"}
     )
     fig_sat.update_layout(showlegend=False, plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
@@ -293,11 +220,8 @@ with right:
     st.markdown('<p class="score-explain">Score based on opportunity gap — low competition + strong demand signals. Higher = better opportunity.</p>', unsafe_allow_html=True)
     fig_opp = px.bar(
         saturation.sort_values("opportunity_score", ascending=True),
-        x="opportunity_score",
-        y="neighbourhood",
-        orientation="h",
-        color="opportunity_score",
-        color_continuous_scale="RdYlGn",
+        x="opportunity_score", y="neighbourhood", orientation="h",
+        color="opportunity_score", color_continuous_scale="RdYlGn",
         labels={"opportunity_score": "Opportunity Score", "neighbourhood": "Area"}
     )
     fig_opp.update_layout(showlegend=False, plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
@@ -317,12 +241,7 @@ if has_access:
     st.subheader(f"🗺️ {city} Cannabis Store Map")
     st.markdown(f"Every licensed cannabis store in {city} — colour coded by performance.")
     try:
-        if city == "Calgary" and geocoded_data is not None:
-            geocoded = geocoded_data.dropna(subset=["lat", "lng"])
-            map_center = [51.0447, -114.0719]
-        else:
-            geocoded = pd.DataFrame()
-            map_center = [53.5461, -113.4938]
+        geocoded = geocoded_data.dropna(subset=["lat", "lng"])
         m = folium.Map(location=map_center, zoom_start=11)
         for idx, row in geocoded.iterrows():
             if row.get("rating", 0) >= 4.5:
@@ -357,7 +276,7 @@ if has_access:
         st_folium(m, width=None, height=500)
         st.markdown(f'<div class="insight-box">📍 Click any store pin to see name, rating and address. Green = top performer, Red = underperformer.</div>', unsafe_allow_html=True)
     except Exception as e:
-        st.info("Map data loading...")
+        st.info(f"Map data loading... {e}")
 else:
     st.markdown(f"""
     <div style="background:#111; border:2px solid #2E7D32; padding:40px; border-radius:12px; text-align:center; margin:20px 0">
@@ -390,11 +309,8 @@ if has_access:
             st.markdown(f'<div class="risk-box">⚠️ These postal codes in {city} are overcrowded — new entrants face maximum competition and margin pressure.</div>', unsafe_allow_html=True)
         fig_postal = px.bar(
             postal.head(15).sort_values("opportunity_score"),
-            x="opportunity_score",
-            y="fsa",
-            orientation="h",
-            color="opportunity_score",
-            color_continuous_scale="RdYlGn",
+            x="opportunity_score", y="fsa", orientation="h",
+            color="opportunity_score", color_continuous_scale="RdYlGn",
             title=f"Top 15 {city} Postal Areas by Opportunity Score",
             labels={"opportunity_score": "Opportunity Score", "fsa": "Postal Area"}
         )
@@ -413,19 +329,14 @@ else:
 
 st.markdown("---")
 
-# Competitive Landscape
 st.subheader("🏆 Competitive Landscape")
 st.markdown(f"Who dominates {city} right now — and where the gaps are.")
 st.markdown('<p style="color:#aaa; font-size:13px">Coming soon: top-performing stores & competitor tracking</p>', unsafe_allow_html=True)
 
 top_stores = enriched[enriched['review_count'] > 50].sort_values("rating", ascending=False).head(20)
 fig_stores = px.scatter(
-    top_stores,
-    x="review_count",
-    y="rating",
-    hover_name="Establishment Name",
-    size="review_count",
-    color="rating",
+    top_stores, x="review_count", y="rating",
+    hover_name="Establishment Name", size="review_count", color="rating",
     color_continuous_scale="RdYlGn",
     labels={"review_count": "Number of Reviews", "rating": "Google Rating"}
 )
@@ -462,7 +373,6 @@ else:
 
 st.markdown("---")
 
-# CTA
 st.markdown("""
 <div class="cta-box">
     <h2>🌿 Get Full CannaIQ Intelligence</h2>
@@ -478,7 +388,6 @@ st.markdown("""
 
 st.markdown("---")
 
-# Access code + Payment
 if not has_access:
     st.markdown("**Already a subscriber?**")
     access_code = st.text_input("Enter your access code", placeholder="cannaiq-XXXXX", type="password")
