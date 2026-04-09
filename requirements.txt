@@ -4,3 +4,4 @@ plotly
 requests
 stripe
 Pillow
+python-dotenv
