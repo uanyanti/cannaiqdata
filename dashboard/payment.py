@@ -162,12 +162,12 @@ def show_payment_page():
                     stripe.api_key = secret_key
 
                     if "Starter" in plan:
-                        price_id = os.environ.get("STRIPE_BASIC_PRICE_ID", "")
+                        price_id = os.environ.get("STRIPE_BASIC_PRICE_ID") or "price_1TK6un2KsXpq6oq2IgB9e2ja"
                     elif "Investor" in plan:
-                        price_id = os.environ.get("STRIPE_INVESTOR_PRICE_ID", "")
+                        price_id = os.environ.get("STRIPE_INVESTOR_PRICE_ID") or "price_1TK6xx2KsXpq6oq21rgpbUzk"
                     else:
-                        price_id = os.environ.get("STRIPE_PRICE_ID", "")
-
+                        price_id = os.environ.get("STRIPE_PRICE_ID") or "price_1TIgsI2KsXpq6oq2PXLKN9jd"
+                        
                     session = stripe.checkout.Session.create(
                         payment_method_types=["card"],
                         line_items=[{"price": price_id, "quantity": 1}],
