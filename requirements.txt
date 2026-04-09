@@ -2,10 +2,5 @@ streamlit
 pandas
 plotly
 requests
-beautifulsoup4
-openpyxl
-xlrd
-python-dotenv
 stripe
-folium
-streamlit-folium
+Pillow
