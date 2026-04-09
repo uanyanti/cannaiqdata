@@ -7,50 +7,301 @@ import folium
 from streamlit_folium import st_folium
 
 st.set_page_config(
-    page_title="CannaIQ - Cannabis Market Intelligence",
+    page_title="CannaIQ — Cannabis Market Intelligence",
     page_icon="🌿",
     layout="wide"
 )
 
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-html, body, [class*="css"] { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important; background-color: #080d08 !important; color: #f0f0f0 !important; }
-.stApp { background-color: #080d08 !important; }
-.stApp > header { background-color: #080d08 !important; }
-.main { background-color: #080d08 !important; }
-[data-testid="stAppViewContainer"] { background-color: #080d08 !important; }
-[data-testid="stHeader"] { background-color: #080d08 !important; }
-.main .block-container { max-width: 780px !important; padding: 2rem 2rem !important; margin: 0 auto !important; }
-p, label, span, div { color: #cccccc !important; }
-.stMarkdown p { color: #cccccc !important; }
-[data-testid="stMarkdownContainer"] p { color: #cccccc !important; }
-input::placeholder { color: #666 !important; }
-[data-testid="stTextInput"] label { color: #aaaaaa !important; }
-[data-testid="stSelectbox"] label { color: #aaaaaa !important; }
-[data-testid="stSlider"] label { color: #aaaaaa !important; }
-#MainMenu {visibility: hidden;} footer {visibility: hidden;} header {visibility: hidden;} .stDeployButton {display: none;} [data-testid="stToolbar"] {display: none;}
-[data-testid="metric-container"] { background: #0f1a0f !important; border: 1px solid #1a2e1a !important; border-radius: 14px !important; padding: 20px !important; }
-[data-testid="metric-container"] label { color: #666 !important; font-size: 12px !important; font-weight: 600 !important; text-transform: uppercase !important; letter-spacing: 1px !important; }
-[data-testid="metric-container"] [data-testid="stMetricValue"] { color: #4CAF50 !important; font-size: 36px !important; font-weight: 800 !important; }
-h1, h2, h3 { color: #f0f0f0 !important; font-weight: 800 !important; letter-spacing: -0.5px !important; }
-[data-testid="stDataFrame"] { background: #0f1a0f !important; border: 1px solid #1a2e1a !important; border-radius: 14px !important; overflow: hidden !important; }
-[data-testid="stButton"] button { background: #2E7D32 !important; color: white !important; border: none !important; border-radius: 28px !important; font-weight: 700 !important; font-size: 15px !important; padding: 12px 32px !important; }
-[data-testid="stButton"] button:hover { background: #388E3C !important; }
-[data-testid="stSelectbox"] > div { background: #0f1a0f !important; border: 1px solid #1a2e1a !important; border-radius: 12px !important; color: #f0f0f0 !important; }
-[data-testid="stTextInput"] input { background: #0f1a0f !important; border: 1px solid #1a2e1a !important; border-radius: 12px !important; color: #f0f0f0 !important; padding: 12px 16px !important; }
-hr { border-color: #1a2e1a !important; margin: 32px 0 !important; }
-[data-testid="stAlert"] { background: #0f1a0f !important; border: 1px solid #1a2e1a !important; border-radius: 12px !important; color: #f0f0f0 !important; }
-@media (max-width: 768px) { .main .block-container { padding: 1rem !important; } }
-.main-header { font-size: 42px; font-weight: 800; color: #4CAF50; text-align: center; padding: 10px 0; letter-spacing: -1px; }
-.sub-header { font-size: 16px; color: #888; text-align: center; margin-bottom: 10px; }
-.decision-banner-green { background: #1B5E20; padding: 28px 24px; border-radius: 18px; text-align: center; color: white; font-size: 18px; font-weight: 700; margin-bottom: 10px; }
-.decision-banner-red { background: #7f0000; padding: 28px 24px; border-radius: 18px; text-align: center; color: white; font-size: 18px; font-weight: 700; margin-bottom: 10px; }
-.insight-box { background: #0f1a0f; border-left: 4px solid #2E7D32; padding: 16px 20px; border-radius: 0 12px 12px 0; color: #ccc; font-size: 14px; margin-top: 10px; line-height: 1.6; }
-.risk-box { background: #1a0a0a; border-left: 4px solid #FF5252; padding: 16px 20px; border-radius: 0 12px 12px 0; color: #ccc; font-size: 14px; margin-top: 10px; line-height: 1.6; }
-.why-matters { background: #0f1a0f; border: 1px solid #1e3a1e; padding: 20px 24px; border-radius: 14px; color: white; text-align: center; font-size: 16px; margin: 16px 0; }
-.score-explain { color: #666; font-size: 13px; margin-top: 4px; line-height: 1.5; }
-.cta-box { background: #0f1a0f; border: 2px solid #2E7D32; padding: 40px 32px; border-radius: 20px; text-align: center; color: white; margin-top: 24px; }
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+:root {
+  --bg:        #0b0717;
+  --bg2:       #110d22;
+  --bg3:       #1a1333;
+  --border:    rgba(140,110,220,0.18);
+  --border2:   rgba(140,110,220,0.32);
+  --purple:    #7c3aed;
+  --purple2:   #6d28d9;
+  --purple-lo: rgba(124,58,237,0.14);
+  --gold:      #e8a932;
+  --gold-lo:   rgba(232,169,50,0.14);
+  --text:      #f0eaff;
+  --text2:     #b8a8d8;
+  --text3:     #7a6a9a;
+  --green:     #4ade80;
+  --red:       #f87171;
+}
+
+html, body, [class*="css"] {
+  font-family: 'DM Sans', sans-serif !important;
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+}
+.stApp { background-color: var(--bg) !important; }
+.stApp > header { background-color: var(--bg) !important; }
+.main { background-color: var(--bg) !important; }
+[data-testid="stAppViewContainer"] { background-color: var(--bg) !important; }
+[data-testid="stHeader"] { background-color: var(--bg) !important; }
+.main .block-container { max-width: 1100px !important; padding: 2rem 2.5rem !important; margin: 0 auto !important; }
+
+p, label, span, div { color: var(--text2) !important; }
+.stMarkdown p { color: var(--text2) !important; }
+[data-testid="stMarkdownContainer"] p { color: var(--text2) !important; }
+input::placeholder { color: var(--text3) !important; }
+[data-testid="stTextInput"] label { color: var(--text3) !important; }
+[data-testid="stSelectbox"] label { color: var(--text3) !important; }
+[data-testid="stSlider"] label { color: var(--text3) !important; }
+
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
+.stDeployButton {display: none;}
+[data-testid="stToolbar"] {display: none;}
+
+h1, h2, h3 {
+  font-family: 'Syne', sans-serif !important;
+  color: var(--text) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.3px !important;
+}
+
+[data-testid="metric-container"] {
+  background: var(--bg2) !important;
+  border: 0.5px solid var(--border2) !important;
+  border-radius: 14px !important;
+  padding: 20px !important;
+}
+[data-testid="metric-container"] label {
+  color: var(--text3) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+}
+[data-testid="metric-container"] [data-testid="stMetricValue"] {
+  color: var(--text) !important;
+  font-family: 'Syne', sans-serif !important;
+  font-size: 32px !important;
+  font-weight: 700 !important;
+}
+
+[data-testid="stDataFrame"] {
+  background: var(--bg2) !important;
+  border: 0.5px solid var(--border) !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+}
+
+[data-testid="stButton"] button {
+  background: var(--purple) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 10px !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  padding: 10px 24px !important;
+  transition: background 0.15s !important;
+}
+[data-testid="stButton"] button:hover { background: var(--purple2) !important; }
+
+[data-testid="stSelectbox"] > div {
+  background: var(--bg2) !important;
+  border: 0.5px solid var(--border2) !important;
+  border-radius: 10px !important;
+  color: var(--text) !important;
+}
+[data-testid="stTextInput"] input {
+  background: var(--bg2) !important;
+  border: 0.5px solid var(--border2) !important;
+  border-radius: 10px !important;
+  color: var(--text) !important;
+  padding: 10px 14px !important;
+  font-family: 'DM Sans', sans-serif !important;
+}
+[data-testid="stTextInput"] input:focus {
+  border-color: var(--purple) !important;
+}
+
+[data-testid="stAlert"] {
+  background: var(--bg2) !important;
+  border: 0.5px solid var(--border) !important;
+  border-radius: 10px !important;
+}
+
+hr { border-color: var(--border) !important; margin: 28px 0 !important; }
+
+div[data-baseweb="radio"] label { color: var(--text2) !important; }
+div[data-baseweb="radio"] [data-checked="true"] { border-color: var(--purple) !important; }
+
+[data-testid="stSlider"] [data-baseweb="slider"] div[role="slider"] {
+  background: var(--purple) !important;
+}
+
+@media (max-width: 768px) {
+  .main .block-container { padding: 1rem !important; }
+}
+
+/* ── Custom Components ────────────────────────── */
+.ciq-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0 18px;
+  border-bottom: 0.5px solid rgba(140,110,220,0.2);
+  margin-bottom: 28px;
+}
+.ciq-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #f0eaff;
+}
+.ciq-logo span { color: #e8a932; }
+.ciq-nav-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(74,222,128,0.1);
+  border: 0.5px solid rgba(74,222,128,0.3);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: #4ade80;
+}
+.ciq-nav-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #4ade80;
+  display: inline-block;
+}
+
+.ciq-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(232,169,50,0.12);
+  border: 0.5px solid rgba(232,169,50,0.3);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 11px;
+  color: #e8a932;
+  margin-bottom: 10px;
+}
+
+.ciq-section-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: #a78bfa;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.decision-banner-green {
+  background: var(--bg2);
+  border: 0.5px solid rgba(74,222,128,0.3);
+  border-top: 3px solid #4ade80;
+  padding: 24px 20px;
+  border-radius: 14px;
+  text-align: center;
+  color: #f0eaff;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.decision-banner-red {
+  background: var(--bg2);
+  border: 0.5px solid rgba(248,113,113,0.3);
+  border-top: 3px solid #f87171;
+  padding: 24px 20px;
+  border-radius: 14px;
+  text-align: center;
+  color: #f0eaff;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.insight-box {
+  background: var(--bg2);
+  border-left: 3px solid #7c3aed;
+  padding: 14px 18px;
+  border-radius: 0 10px 10px 0;
+  color: var(--text2);
+  font-size: 13.5px;
+  margin-top: 10px;
+  line-height: 1.6;
+}
+.risk-box {
+  background: var(--bg2);
+  border-left: 3px solid #f87171;
+  padding: 14px 18px;
+  border-radius: 0 10px 10px 0;
+  color: var(--text2);
+  font-size: 13.5px;
+  margin-top: 10px;
+  line-height: 1.6;
+}
+
+.alert-card {
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin: 6px 0;
+}
+.alert-card.danger { border-left: 3px solid #f87171; }
+.alert-card.warning { border-left: 3px solid #e8a932; }
+
+.gate-card {
+  background: var(--bg2);
+  border: 0.5px solid var(--border2);
+  border-radius: 16px;
+  padding: 40px 32px;
+  text-align: center;
+  margin: 16px 0;
+}
+
+.cta-box {
+  background: var(--bg3);
+  border: 0.5px solid var(--border2);
+  border-radius: 20px;
+  padding: 44px 36px;
+  text-align: center;
+  margin-top: 24px;
+}
+
+.score-explain {
+  color: var(--text3);
+  font-size: 13px;
+  margin-top: 2px;
+  line-height: 1.5;
+}
+
+.why-matters {
+  background: var(--bg2);
+  border: 0.5px solid var(--border2);
+  padding: 18px 24px;
+  border-radius: 12px;
+  color: var(--text);
+  text-align: center;
+  font-size: 15px;
+  margin: 12px 0;
+}
+
+.confidence-badge {
+  display: inline-block;
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  padding: 5px 16px;
+  border-radius: 20px;
+  color: var(--text3);
+  font-size: 12px;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -72,8 +323,16 @@ def load_edmonton():
     geocoded = pd.read_csv(os.path.join(base, "data", "edmonton_geocoded.csv"))
     return enriched, saturation, postal, geocoded
 
-st.markdown("---")
-city = st.radio("Select City", ["Calgary", "Edmonton"], horizontal=True)
+# ── Navbar ────────────────────────────────────────────────────
+st.markdown("""
+<div class="ciq-navbar">
+  <div class="ciq-logo">Canna<span>IQ</span></div>
+  <div class="ciq-nav-badge">Live data</div>
+</div>
+""", unsafe_allow_html=True)
+
+# ── City Switcher ─────────────────────────────────────────────
+city = st.radio("Select city", ["Calgary", "Edmonton"], horizontal=True)
 
 if city == "Calgary":
     enriched, saturation, postal_data, geocoded_data = load_calgary()
@@ -98,87 +357,95 @@ def check_access():
 
 has_access = check_access()
 
-st.markdown('<p style="text-align:center; color:#2E7D32; font-size:13px; font-weight:bold; letter-spacing:2px">FREE PREVIEW</p>', unsafe_allow_html=True)
-st.markdown('<p class="main-header">🌿 CannaIQ</p>', unsafe_allow_html=True)
-st.markdown(f'<p class="sub-header">Cannabis Market Intelligence — {city_label} | ⚡ Updated Daily — market conditions change fast</p>', unsafe_allow_html=True)
-st.markdown('<p style="text-align:center; color:#666; font-size:14px; margin-bottom:10px">Powered by real-time license filings, store density, and demand signals</p>', unsafe_allow_html=True)
+# ── Header ────────────────────────────────────────────────────
+st.markdown(f"""
+<div style="text-align:center; padding: 8px 0 24px">
+  <div class="ciq-badge">Alberta cannabis market intelligence · {city_label}</div>
+  <h1 style="font-size:38px; font-weight:700; color:#f0eaff; margin:10px 0 8px; line-height:1.15">
+    Know where to open<br><span style="color:#e8a932">before your competitors do.</span>
+  </h1>
+  <p style="font-size:15px; color:#7a6a9a; max-width:520px; margin:0 auto; line-height:1.7">
+    Powered by AGLC license filings, Google Maps signals, and real-time store density data.
+  </p>
+</div>
+""", unsafe_allow_html=True)
 
 st.markdown("""
 <div class="why-matters">
-    🚨 <strong>Avoid costly mistakes</strong> — CannaIQ tells you exactly where to open and where to stay away.
+  ⚡ <strong style="color:#f0eaff">Avoid costly mistakes</strong>
+  <span style="color:#7a6a9a"> — CannaIQ tells you exactly where to open and where to stay away.</span>
 </div>
 """, unsafe_allow_html=True)
 
 st.markdown("---")
 
-st.subheader("🎯 What You Should Do Right Now")
-st.markdown('<p class="score-explain" style="font-size:15px">These recommendations are based on competition density and demand gaps.</p>', unsafe_allow_html=True)
-st.markdown('<p style="text-align:center; color:#FFD700; font-size:15px; font-weight:bold">💰 These insights can save or make you $100K+ depending on your location decision.</p>', unsafe_allow_html=True)
+# ── Decision Banners ──────────────────────────────────────────
+st.markdown('<div class="ciq-section-label">What you should do right now</div>', unsafe_allow_html=True)
+st.markdown(f'<p class="score-explain" style="font-size:14px; margin-bottom:14px">Based on competition density and demand gaps in {city} — updated daily.</p>', unsafe_allow_html=True)
 
 col_yes, col_no = st.columns(2)
 with col_yes:
     st.markdown(f"""
     <div class="decision-banner-green">
-        BEST AREA TO OPEN<br>
-        <span style="font-size:28px">{best_area}</span><br>
-        <span style="font-size:14px">Lowest competition in the city right now</span><br>
-        <span style="font-size:13px; background:#2E7D32; padding:3px 8px; border-radius:10px">#1 Opportunity in {city}</span><br>
-        <span style="font-size:13px; color:#90EE90">Best location for new store entry right now</span>
+      <div style="font-size:11px; font-weight:500; color:#4ade80; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px">Best area to open</div>
+      <div style="font-family:'Syne',sans-serif; font-size:26px; font-weight:700; color:#f0eaff; margin-bottom:6px">{best_area}</div>
+      <div style="font-size:13px; color:#b8a8d8">Lowest competition in {city} right now</div>
+      <div style="margin-top:10px; display:inline-block; background:rgba(74,222,128,0.12); border:0.5px solid rgba(74,222,128,0.3); border-radius:20px; padding:3px 12px; font-size:12px; color:#4ade80">#1 Opportunity zone</div>
     </div>
     """, unsafe_allow_html=True)
 
 with col_no:
     st.markdown(f"""
     <div class="decision-banner-red">
-        AVOID THESE AREAS<br>
-        <span style="font-size:28px">{avoid_area}</span><br>
-        <span style="font-size:14px">Highest store density — hardest to compete</span><br>
-        <span style="font-size:13px; color:#FFB3B3">High risk — avoid new store entry</span>
+      <div style="font-size:11px; font-weight:500; color:#f87171; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px">Avoid these areas</div>
+      <div style="font-family:'Syne',sans-serif; font-size:26px; font-weight:700; color:#f0eaff; margin-bottom:6px">{avoid_area}</div>
+      <div style="font-size:13px; color:#b8a8d8">Highest store density — hardest to compete</div>
+      <div style="margin-top:10px; display:inline-block; background:rgba(248,113,113,0.12); border:0.5px solid rgba(248,113,113,0.3); border-radius:20px; padding:3px 12px; font-size:12px; color:#f87171">High risk · avoid entry</div>
     </div>
     """, unsafe_allow_html=True)
 
 st.markdown("""
-<div style="text-align:center; margin-top:15px; margin-bottom:10px">
-    <span style="background:#333; padding:6px 16px; border-radius:20px; color:#aaa; font-size:13px">
-        📊 Confidence: Medium (AGLC + Google data)
-    </span>
+<div style="text-align:center; margin-top:12px; margin-bottom:4px">
+  <span class="confidence-badge">📊 Confidence: Medium — AGLC + Google data</span>
 </div>
 """, unsafe_allow_html=True)
 
 st.markdown("---")
 
-st.subheader("🚨 Live Market Alerts")
-st.markdown('<p class="score-explain">Real-time signals from AGLC license filings and market activity.</p>', unsafe_allow_html=True)
+# ── Live Alerts ───────────────────────────────────────────────
+st.markdown('<div class="ciq-section-label">Live market alerts</div>', unsafe_allow_html=True)
+st.markdown('<p class="score-explain" style="margin-bottom:12px">Real-time signals from AGLC license filings and market activity.</p>', unsafe_allow_html=True)
 
 col_alert1, col_alert2 = st.columns(2)
 with col_alert1:
     st.markdown(f"""
-    <div style="background:#1a1a2e; border-left:4px solid #FF5252; padding:15px; border-radius:8px; margin:5px 0">
-        <p style="color:#FF5252; font-weight:bold; margin:0">🚨 New License Application</p>
-        <p style="color:#fff; margin:5px 0">New cannabis store application filed in {city}</p>
-        <p style="color:#aaa; font-size:12px; margin:0">2 days ago · AGLC Registry</p>
+    <div class="alert-card danger">
+      <div style="font-size:12px; font-weight:500; color:#f87171; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.06em">New license application</div>
+      <div style="font-size:14px; color:#f0eaff; margin-bottom:4px">New cannabis store application filed in {city}</div>
+      <div style="font-size:11px; color:#7a6a9a">2 days ago · AGLC Registry</div>
     </div>
     """, unsafe_allow_html=True)
 
 with col_alert2:
     st.markdown(f"""
-    <div style="background:#1a1a2e; border-left:4px solid #FFA500; padding:15px; border-radius:8px; margin:5px 0">
-        <p style="color:#FFA500; font-weight:bold; margin:0">⚠️ Saturation Alert</p>
-        <p style="color:#fff; margin:5px 0">{avoid_area} reached maximum saturation threshold</p>
-        <p style="color:#aaa; font-size:12px; margin:0">Updated today · CannaIQ Analysis</p>
+    <div class="alert-card warning">
+      <div style="font-size:12px; font-weight:500; color:#e8a932; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.06em">Saturation alert</div>
+      <div style="font-size:14px; color:#f0eaff; margin-bottom:4px">{avoid_area} reached maximum saturation threshold</div>
+      <div style="font-size:11px; color:#7a6a9a">Updated today · CannaIQ Analysis</div>
     </div>
     """, unsafe_allow_html=True)
 
 st.markdown("""
-<div style="background:#111; border:1px solid #333; padding:15px; border-radius:8px; text-align:center; margin-top:10px">
-    <p style="color:#aaa; margin:0">🔒 <strong style="color:#2E7D32">Premium subscribers</strong> get real-time alerts for new license applications, competitor openings, and saturation changes in their target areas.</p>
+<div style="background:rgba(124,58,237,0.08); border:0.5px solid rgba(124,58,237,0.25); padding:14px 18px; border-radius:10px; text-align:center; margin-top:10px">
+  <span style="color:#7a6a9a; font-size:13px">🔒 <strong style="color:#a78bfa">Premium subscribers</strong> get real-time alerts for new license applications, competitor openings, and saturation changes.</span>
 </div>
 """, unsafe_allow_html=True)
 
 st.markdown("---")
 
-st.subheader("📊 Market Risk Overview")
-st.markdown('<p class="score-explain" style="font-size:14px">Rising store count increases competition and reduces margins.</p>', unsafe_allow_html=True)
+# ── KPI Metrics ───────────────────────────────────────────────
+st.markdown('<div class="ciq-section-label">Market risk overview</div>', unsafe_allow_html=True)
+st.markdown('<p class="score-explain" style="margin-bottom:14px">Rising store count increases competition and reduces margins.</p>', unsafe_allow_html=True)
 
 operational = len(enriched[enriched['business_status'] == 'OPERATIONAL'])
 high_comp = len(enriched[enriched['review_count'] > 200])
@@ -186,72 +453,86 @@ new_stores = 15 if city == "Calgary" else 12
 
 col1, col2, col3 = st.columns(3)
 with col1:
-    st.metric("Total Active Stores", operational)
+    st.metric("Total active stores", operational)
 with col2:
-    st.metric("High Competition Stores", high_comp)
+    st.metric("High competition stores", high_comp)
 with col3:
-    st.metric("New Stores (Last 6 Months)", new_stores)
+    st.metric("New stores (last 6 months)", new_stores)
 
 st.markdown("---")
 
+# ── Charts ────────────────────────────────────────────────────
 st.markdown("""
-<div class="insight-box" style="text-align:center; font-size:17px; margin-bottom:15px">
-    💰 <strong>These scores show where you're most likely to win or lose money.</strong>
+<div class="insight-box" style="text-align:center; font-size:15px; margin-bottom:16px">
+  💰 <strong style="color:#f0eaff">These scores show where you're most likely to win or lose money.</strong>
 </div>
 """, unsafe_allow_html=True)
+
+PLOT_LAYOUT = dict(
+    plot_bgcolor='rgba(0,0,0,0)',
+    paper_bgcolor='rgba(0,0,0,0)',
+    font=dict(family='DM Sans, sans-serif', color='#b8a8d8'),
+    showlegend=False,
+    margin=dict(l=10, r=10, t=10, b=10),
+    xaxis=dict(gridcolor='rgba(140,110,220,0.1)', zerolinecolor='rgba(140,110,220,0.15)'),
+    yaxis=dict(gridcolor='rgba(140,110,220,0.1)')
+)
 
 left, right = st.columns(2)
 
 with left:
-    st.subheader("🚫 Where NOT to Open")
-    st.markdown('<p class="score-explain">Score based on store density + competition signals. Higher = more saturated = higher risk.</p>', unsafe_allow_html=True)
+    st.markdown('<div class="ciq-section-label">Where not to open</div>', unsafe_allow_html=True)
+    st.markdown('<p class="score-explain">Higher score = more saturated = higher risk.</p>', unsafe_allow_html=True)
     fig_sat = px.bar(
         saturation.sort_values("saturation_score", ascending=True),
         x="saturation_score", y="neighbourhood", orientation="h",
-        color="saturation_score", color_continuous_scale="RdYlGn_r",
-        labels={"saturation_score": "Saturation Score", "neighbourhood": "Area"}
+        color="saturation_score", color_continuous_scale=["#4ade80", "#e8a932", "#f87171"],
+        labels={"saturation_score": "Saturation score", "neighbourhood": "Area"}
     )
-    fig_sat.update_layout(showlegend=False, plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+    fig_sat.update_layout(**PLOT_LAYOUT)
+    fig_sat.update_coloraxes(showscale=False)
     st.plotly_chart(fig_sat, use_container_width=True)
-    st.markdown(f'<div class="risk-box">⚠️ {avoid_area} has the highest competition density — expect lower margins and harder customer acquisition</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="risk-box">⚠️ {avoid_area} has the highest competition density — expect lower margins and harder customer acquisition.</div>', unsafe_allow_html=True)
 
 with right:
-    st.subheader("✅ Best Areas to Open")
-    st.markdown('<p class="score-explain">Score based on opportunity gap — low competition + strong demand signals. Higher = better opportunity.</p>', unsafe_allow_html=True)
+    st.markdown('<div class="ciq-section-label">Best areas to open</div>', unsafe_allow_html=True)
+    st.markdown('<p class="score-explain">Higher score = lower competition + stronger demand signals.</p>', unsafe_allow_html=True)
     fig_opp = px.bar(
         saturation.sort_values("opportunity_score", ascending=True),
         x="opportunity_score", y="neighbourhood", orientation="h",
-        color="opportunity_score", color_continuous_scale="RdYlGn",
-        labels={"opportunity_score": "Opportunity Score", "neighbourhood": "Area"}
+        color="opportunity_score", color_continuous_scale=["#f87171", "#e8a932", "#4ade80"],
+        labels={"opportunity_score": "Opportunity score", "neighbourhood": "Area"}
     )
-    fig_opp.update_layout(showlegend=False, plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+    fig_opp.update_layout(**PLOT_LAYOUT)
+    fig_opp.update_coloraxes(showscale=False)
     st.plotly_chart(fig_opp, use_container_width=True)
     st.markdown(f'<div class="insight-box">✅ {best_area} = highest opportunity score in the city. Low saturation, strong foot traffic, underserved market.</div>', unsafe_allow_html=True)
 
 st.markdown("""
-<div style="background:#111; border:1px solid #2E7D32; padding:15px; border-radius:8px; text-align:center; margin-top:10px">
-    <p style="color:#aaa; margin:0">🔒 <strong style="color:#2E7D32">Full location-level insights</strong> — exact street addresses, store performance scores, and expansion signals available in premium version.</p>
+<div style="background:rgba(124,58,237,0.08); border:0.5px solid rgba(124,58,237,0.25); padding:14px 18px; border-radius:10px; text-align:center; margin-top:10px">
+  <span style="color:#7a6a9a; font-size:13px">🔒 <strong style="color:#a78bfa">Full location-level insights</strong> — exact addresses, store performance scores, and expansion signals in premium.</span>
 </div>
 """, unsafe_allow_html=True)
 
 st.markdown("---")
 
-# Map View — GATED
+# ── Map (Gated) ───────────────────────────────────────────────
 if has_access:
-    st.subheader(f"🗺️ {city} Cannabis Store Map")
-    st.markdown(f"Every licensed cannabis store in {city} — colour coded by performance.")
+    st.markdown('<div class="ciq-section-label">Interactive store map</div>', unsafe_allow_html=True)
+    st.markdown(f'<p class="score-explain" style="margin-bottom:12px">Every licensed cannabis store in {city} — colour coded by performance rating.</p>', unsafe_allow_html=True)
     try:
         geocoded = geocoded_data.dropna(subset=["lat", "lng"])
-        m = folium.Map(location=map_center, zoom_start=11)
+        m = folium.Map(location=map_center, zoom_start=11, tiles="CartoDB dark_matter")
         for idx, row in geocoded.iterrows():
-            if row.get("rating", 0) >= 4.5:
-                color = "green"
-            elif row.get("rating", 0) >= 4.0:
-                color = "orange"
+            rating = row.get("rating", 0)
+            if rating >= 4.5:
+                color = "#4ade80"
+            elif rating >= 4.0:
+                color = "#e8a932"
             else:
-                color = "red"
+                color = "#f87171"
             popup_text = f"""
-            <b>{row['Establishment Name']}</b><br>
+            <b style="color:#1a1333">{row['Establishment Name']}</b><br>
             Rating: {row.get('rating', 'N/A')}<br>
             Reviews: {row.get('review_count', 'N/A')}<br>
             {row.get('Site Address Line 1', '')}
@@ -259,102 +540,107 @@ if has_access:
             folium.CircleMarker(
                 location=[row["lat"], row["lng"]],
                 radius=8, color=color, fill=True,
-                fill_color=color, fill_opacity=0.7,
+                fill_color=color, fill_opacity=0.8,
                 popup=folium.Popup(popup_text, max_width=200)
             ).add_to(m)
         legend_html = """
-        <div style="position: fixed; bottom: 30px; left: 30px; z-index: 1000;
-                    background: white; padding: 10px; border-radius: 8px;
-                    border: 2px solid grey; font-size: 13px;">
-            <b>Store Rating</b><br>
-            <span style="color:green">●</span> 4.5+ stars<br>
-            <span style="color:orange">●</span> 4.0-4.5 stars<br>
-            <span style="color:red">●</span> Below 4.0
+        <div style="position:fixed; bottom:30px; left:30px; z-index:1000;
+                    background:#1a1333; border:1px solid rgba(140,110,220,0.3);
+                    padding:12px 16px; border-radius:10px; font-size:12px; color:#b8a8d8;">
+          <b style="color:#f0eaff">Store rating</b><br>
+          <span style="color:#4ade80">●</span> 4.5+ stars<br>
+          <span style="color:#e8a932">●</span> 4.0–4.5 stars<br>
+          <span style="color:#f87171">●</span> Below 4.0
         </div>
         """
         m.get_root().html.add_child(folium.Element(legend_html))
         st_folium(m, width=None, height=500)
-        st.markdown(f'<div class="insight-box">📍 Click any store pin to see name, rating and address. Green = top performer, Red = underperformer.</div>', unsafe_allow_html=True)
+        st.markdown('<div class="insight-box">📍 Click any store pin to see name, rating, and address. Green = top performer · Red = underperformer.</div>', unsafe_allow_html=True)
     except Exception as e:
         st.info(f"Map data loading... {e}")
 else:
     st.markdown(f"""
-    <div style="background:#111; border:2px solid #2E7D32; padding:40px; border-radius:12px; text-align:center; margin:20px 0">
-        <p style="font-size:24px; color:#2E7D32; font-weight:bold">🗺️ Interactive Store Map</p>
-        <p style="color:#aaa; font-size:16px">See every cannabis store in {city} plotted on a live map — colour coded by performance rating.</p>
-        <p style="color:#555; font-size:14px">🔒 Available to CannaIQ subscribers</p>
+    <div class="gate-card">
+      <div style="font-size:28px; margin-bottom:10px">🗺️</div>
+      <div style="font-family:'Syne',sans-serif; font-size:20px; font-weight:700; color:#f0eaff; margin-bottom:8px">Interactive store map</div>
+      <div style="color:#7a6a9a; font-size:14px; margin-bottom:12px">See every cannabis store in {city} plotted on a live map — colour coded by performance rating.</div>
+      <div style="display:inline-block; background:rgba(124,58,237,0.12); border:0.5px solid rgba(124,58,237,0.3); border-radius:20px; padding:4px 14px; font-size:12px; color:#a78bfa">🔒 Available to subscribers</div>
     </div>
     """, unsafe_allow_html=True)
 
 st.markdown("---")
 
-# Postal Code Analysis — GATED
+# ── Postal Code Analysis (Gated) ──────────────────────────────
 if has_access:
-    st.subheader("📮 Street Level Intelligence — Postal Code Analysis")
-    st.markdown(f"Drill down beyond quadrants — see opportunity and saturation at postal code level in {city}.")
+    st.markdown('<div class="ciq-section-label">Street level intelligence</div>', unsafe_allow_html=True)
+    st.markdown(f'<p class="score-explain" style="margin-bottom:12px">Postal code breakdown — opportunity and saturation at street level in {city}.</p>', unsafe_allow_html=True)
     try:
         postal = postal_data
         col_post1, col_post2 = st.columns(2)
         with col_post1:
-            st.markdown("**🎯 Top 10 Opportunity Postal Codes**")
+            st.markdown("**Top 10 opportunity postal codes**")
             top_postal = postal.head(10)[["fsa", "store_count", "avg_rating", "opportunity_score"]]
-            top_postal.columns = ["Postal Area", "Stores", "Avg Rating", "Opportunity Score"]
+            top_postal.columns = ["Postal area", "Stores", "Avg rating", "Opportunity score"]
             st.dataframe(top_postal, use_container_width=True)
             st.markdown(f'<div class="insight-box">✅ These postal codes have the lowest competition and strongest entry opportunity in {city} right now.</div>', unsafe_allow_html=True)
         with col_post2:
-            st.markdown("**⚠️ Most Saturated Postal Codes**")
+            st.markdown("**Most saturated postal codes**")
             sat_postal = postal.nlargest(10, "saturation_score")[["fsa", "store_count", "saturation_score"]]
-            sat_postal.columns = ["Postal Area", "Stores", "Saturation Score"]
+            sat_postal.columns = ["Postal area", "Stores", "Saturation score"]
             st.dataframe(sat_postal, use_container_width=True)
-            st.markdown(f'<div class="risk-box">⚠️ These postal codes in {city} are overcrowded — new entrants face maximum competition and margin pressure.</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="risk-box">⚠️ These postal codes are overcrowded — new entrants face maximum competition and margin pressure.</div>', unsafe_allow_html=True)
         fig_postal = px.bar(
             postal.head(15).sort_values("opportunity_score"),
             x="opportunity_score", y="fsa", orientation="h",
-            color="opportunity_score", color_continuous_scale="RdYlGn",
-            title=f"Top 15 {city} Postal Areas by Opportunity Score",
-            labels={"opportunity_score": "Opportunity Score", "fsa": "Postal Area"}
+            color="opportunity_score",
+            color_continuous_scale=["#f87171", "#e8a932", "#4ade80"],
+            title=f"Top 15 {city} postal areas by opportunity score",
+            labels={"opportunity_score": "Opportunity score", "fsa": "Postal area"}
         )
-        fig_postal.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', showlegend=False)
+        fig_postal.update_layout(**PLOT_LAYOUT)
+        fig_postal.update_coloraxes(showscale=False)
         st.plotly_chart(fig_postal, use_container_width=True)
     except Exception as e:
         st.info("Postal code data loading...")
 else:
     st.markdown(f"""
-    <div style="background:#111; border:2px solid #2E7D32; padding:40px; border-radius:12px; text-align:center; margin:20px 0">
-        <p style="font-size:24px; color:#2E7D32; font-weight:bold">📮 Street Level Intelligence</p>
-        <p style="color:#aaa; font-size:16px">{city} postal codes ranked by opportunity and saturation score — drill down to street level.</p>
-        <p style="color:#555; font-size:14px">🔒 Available to CannaIQ subscribers</p>
+    <div class="gate-card">
+      <div style="font-size:28px; margin-bottom:10px">📮</div>
+      <div style="font-family:'Syne',sans-serif; font-size:20px; font-weight:700; color:#f0eaff; margin-bottom:8px">Street level intelligence</div>
+      <div style="color:#7a6a9a; font-size:14px; margin-bottom:12px">{city} postal codes ranked by opportunity and saturation — drill down to street level.</div>
+      <div style="display:inline-block; background:rgba(124,58,237,0.12); border:0.5px solid rgba(124,58,237,0.3); border-radius:20px; padding:4px 14px; font-size:12px; color:#a78bfa">🔒 Available to subscribers</div>
     </div>
     """, unsafe_allow_html=True)
 
 st.markdown("---")
 
-st.subheader("🏆 Competitive Landscape")
-st.markdown(f"Who dominates {city} right now — and where the gaps are.")
-st.markdown('<p style="color:#aaa; font-size:13px">Coming soon: top-performing stores & competitor tracking</p>', unsafe_allow_html=True)
+# ── Competitive Landscape ─────────────────────────────────────
+st.markdown('<div class="ciq-section-label">Competitive landscape</div>', unsafe_allow_html=True)
+st.markdown(f'<p class="score-explain" style="margin-bottom:12px">Who dominates {city} right now — and where the gaps are.</p>', unsafe_allow_html=True)
 
 top_stores = enriched[enriched['review_count'] > 50].sort_values("rating", ascending=False).head(20)
 fig_stores = px.scatter(
     top_stores, x="review_count", y="rating",
     hover_name="Establishment Name", size="review_count", color="rating",
-    color_continuous_scale="RdYlGn",
-    labels={"review_count": "Number of Reviews", "rating": "Google Rating"}
+    color_continuous_scale=["#f87171", "#e8a932", "#4ade80"],
+    labels={"review_count": "Number of reviews", "rating": "Google rating"}
 )
-fig_stores.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+fig_stores.update_layout(**PLOT_LAYOUT)
+fig_stores.update_coloraxes(showscale=False)
 st.plotly_chart(fig_stores, use_container_width=True)
 top_store = enriched.sort_values("review_count", ascending=False).iloc[0]
 st.markdown(f'<div class="insight-box">{top_store["Establishment Name"]} leads with {int(top_store["review_count"])} reviews and a {top_store["rating"]} rating — the benchmark every {city} operator is competing against.</div>', unsafe_allow_html=True)
 
 st.markdown("---")
 
-# Store Intelligence Table — GATED
+# ── Store Intelligence Table (Gated) ──────────────────────────
 if has_access:
-    st.subheader("📋 Full Store Intelligence")
+    st.markdown('<div class="ciq-section-label">Full store intelligence</div>', unsafe_allow_html=True)
     col_filter1, col_filter2 = st.columns(2)
     with col_filter1:
-        min_rating = st.slider("Minimum Rating", 0.0, 5.0, 4.0, 0.1)
+        min_rating = st.slider("Minimum rating", 0.0, 5.0, 4.0, 0.1)
     with col_filter2:
-        status_filter = st.selectbox("Business Status", ["All", "OPERATIONAL", "CLOSED_PERMANENTLY"])
+        status_filter = st.selectbox("Business status", ["All", "OPERATIONAL", "CLOSED_PERMANENTLY"])
     filtered = enriched[enriched['rating'] >= min_rating]
     if status_filter != "All":
         filtered = filtered[filtered['business_status'] == status_filter]
@@ -364,44 +650,52 @@ if has_access:
     )
 else:
     st.markdown(f"""
-    <div style="background:#111; border:2px solid #2E7D32; padding:40px; border-radius:12px; text-align:center; margin:20px 0">
-        <p style="font-size:24px; color:#2E7D32; font-weight:bold">📋 Full Store Intelligence</p>
-        <p style="color:#aaa; font-size:16px">Complete database of all {city_stores} {city} cannabis stores with ratings, addresses, review counts and business status.</p>
-        <p style="color:#555; font-size:14px">🔒 Available to CannaIQ subscribers</p>
+    <div class="gate-card">
+      <div style="font-size:28px; margin-bottom:10px">📋</div>
+      <div style="font-family:'Syne',sans-serif; font-size:20px; font-weight:700; color:#f0eaff; margin-bottom:8px">Full store intelligence</div>
+      <div style="color:#7a6a9a; font-size:14px; margin-bottom:12px">Complete database of all {city_stores} {city} cannabis stores with ratings, addresses, review counts and business status.</div>
+      <div style="display:inline-block; background:rgba(124,58,237,0.12); border:0.5px solid rgba(124,58,237,0.3); border-radius:20px; padding:4px 14px; font-size:12px; color:#a78bfa">🔒 Available to subscribers</div>
     </div>
     """, unsafe_allow_html=True)
 
 st.markdown("---")
 
-st.markdown("""
+# ── CTA Box ───────────────────────────────────────────────────
+st.markdown(f"""
 <div class="cta-box">
-    <h2>🌿 Get Full CannaIQ Intelligence</h2>
-    <p style="font-size:18px">Store-level alerts · Neighbourhood forecasts · Competitor tracking · Canada-wide data</p>
-    <p style="font-size:22px; font-weight:bold">Join CannaIQ Beta — Early Access Now Open</p>
-    <a href="#" style="background:white; color:#2E7D32; padding:12px 24px; border-radius:25px; font-weight:bold; font-size:18px; text-decoration:none; display:inline-block; margin-bottom:15px">
-        🔒 Get real-time alerts, exact locations, and competitor tracking → Join CannaIQ
-    </a>
-    <p style="font-size:16px; color:#90EE90">Plans starting at $99/month</p>
-    <p style="font-size:13px; color:#aaa; margin-top:15px">Data sources: AGLC · Health Canada · Google Maps signals</p>
+  <div class="ciq-badge" style="margin:0 auto 14px; display:inline-flex">Early access now open</div>
+  <div style="font-family:'Syne',sans-serif; font-size:30px; font-weight:700; color:#f0eaff; margin-bottom:10px; line-height:1.2">
+    Get full CannaIQ intelligence
+  </div>
+  <p style="font-size:15px; color:#b8a8d8; max-width:460px; margin:0 auto 20px; line-height:1.7">
+    Store-level alerts · Neighbourhood forecasts · Competitor tracking · Canada-wide data
+  </p>
+  <a href="https://buy.stripe.com/4gM28kf5K8Tn3duf4dcEw00" target="_blank"
+     style="display:inline-block; background:#7c3aed; color:white; padding:13px 28px;
+            border-radius:10px; font-weight:500; font-size:15px; text-decoration:none; margin-bottom:14px">
+    Start free trial — CA$199/month
+  </a>
+  <p style="font-size:13px; color:#7a6a9a">Data sources: AGLC · Health Canada · Google Maps</p>
 </div>
 """, unsafe_allow_html=True)
 
 st.markdown("---")
 
+# ── Access Code ───────────────────────────────────────────────
 if not has_access:
-    st.markdown("**Already a subscriber?**")
+    st.markdown('<div class="ciq-section-label">Already a subscriber?</div>', unsafe_allow_html=True)
     access_code = st.text_input("Enter your access code", placeholder="cannaiq-XXXXX", type="password")
-    if st.button("Unlock Full Access", use_container_width=True):
+    if st.button("Unlock full access", use_container_width=True):
         if access_code.startswith("cannaiq-"):
             st.session_state.has_access = True
             st.rerun()
         else:
             st.error("Invalid access code. Please contact hello@cannaiqdata.ca")
 
-if st.button("🔒 Get Full Access — Join CannaIQ Beta", use_container_width=True):
+if st.button("🔒 Get full access — join CannaIQ", use_container_width=True):
     st.session_state.show_payment = True
 
 if st.session_state.get("show_payment"):
     show_payment_page()
 
-st.markdown(f"<p style='text-align:center;color:#555'>CannaIQ — Cannabis Market Intelligence for Canada | {city} Beta v1.0</p>", unsafe_allow_html=True)
+st.markdown(f"<p style='text-align:center; color:#3d3060; font-size:12px; margin-top:24px'>CannaIQ — Cannabis Market Intelligence for Canada · {city} · v1.0</p>", unsafe_allow_html=True)
