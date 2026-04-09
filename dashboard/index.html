@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CannaIQ — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-dist@2.27.0/plotly.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root {
+  --bg:        #0b0717;
+  --bg2:       #110d22;
+  --bg3:       #1a1333;
+  --border:    rgba(140,110,220,0.18);
+  --border2:   rgba(140,110,220,0.32);
+  --purple:    #7c3aed;
+  --purple2:   #6d28d9;
+  --purple-lo: rgba(124,58,237,0.14);
+  --gold:      #e8a932;
+  --gold-lo:   rgba(232,169,50,0.14);
+  --text:      #f0eaff;
+  --text2:     #b8a8d8;
+  --text3:     #7a6a9a;
+  --green:     #4ade80;
+  --red:       #f87171;
+  --r-md:      8px;
+  --r-lg:      14px;
+  --r-xl:      20px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:58px;background:rgba(11,7,23,0.95);backdrop-filter:blur(12px);border-bottom:0.5px solid var(--border);gap:16px}
+.nav-logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text);text-decoration:none}
+.nav-logo span{color:var(--gold)}
+.nav-center{display:flex;align-items:center;gap:4px}
+.nav-city-btn{background:transparent;border:0.5px solid var(--border);border-radius:var(--r-md);padding:6px 14px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text3);cursor:pointer;transition:all 0.15s}
+.nav-city-btn:hover{background:var(--purple-lo);color:var(--text2)}
+.nav-city-btn.active{background:var(--purple-lo);border-color:rgba(124,58,237,0.5);color:var(--text)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-live{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--green);background:rgba(74,222,128,0.1);border:0.5px solid rgba(74,222,128,0.3);border-radius:20px;padding:4px 12px}
+.nav-live::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+.nav-signout{background:transparent;border:0.5px solid var(--border2);border-radius:var(--r-md);padding:6px 14px;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--text3);cursor:pointer}
+.nav-signout:hover{color:var(--text2)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* LAYOUT */
+.page{max-width:1200px;margin:0 auto;padding:32px 40px 80px}
+
+/* ACCESS GATE */
+.gate-overlay{position:fixed;inset:0;z-index:200;background:rgba(7,4,18,0.96);display:flex;align-items:center;justify-content:center;padding:20px}
+.gate-box{background:var(--bg3);border:0.5px solid var(--border2);border-radius:var(--r-xl);padding:40px;width:100%;max-width:420px;text-align:center}
+.gate-logo{font-family:'Syne',sans-serif;font-size:26px;font-weight:700;color:var(--text);margin-bottom:6px}
+.gate-logo span{color:var(--gold)}
+.gate-sub{font-size:14px;color:var(--text3);margin-bottom:28px}
+.gate-label{display:block;font-size:12px;color:var(--text3);text-align:left;margin-bottom:7px;font-weight:500;letter-spacing:0.03em}
+.gate-input{width:100%;background:var(--bg);border:0.5px solid var(--border2);border-radius:var(--r-md);padding:11px 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);outline:none;margin-bottom:12px;transition:border-color 0.15s}
+.gate-input:focus{border-color:var(--purple)}
+.gate-input::placeholder{color:#3d3060}
+.gate-btn{width:100%;background:var(--purple);border:none;border-radius:var(--r-md);padding:12px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;color:#fff;cursor:pointer;transition:background 0.15s;margin-bottom:14px}
+.gate-btn:hover{background:var(--purple2)}
+.gate-error{font-size:13px;color:var(--red);margin-bottom:10px;display:none}
+.gate-divider{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.gate-divider hr{flex:1;border:none;border-top:0.5px solid var(--border)}
+.gate-divider span{font-size:11px;color:#3d3060}
+.gate-trial{font-size:13px;color:var(--text3)}
+.gate-trial a{color:#a78bfa;text-decoration:none}
+
+/* SECTION SHARED */
+.section-label{font-size:11px;font-weight:500;color:#a78bfa;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+.section-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.2}
+.section-sub{font-size:14px;color:var(--text3);line-height:1.7;margin-bottom:24px}
+.divider{border:none;border-top:0.5px solid var(--border);margin:36px 0}
+
+/* HERO */
+.hero{text-align:center;padding:32px 0 28px;border-bottom:0.5px solid var(--border);margin-bottom:36px}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:var(--gold-lo);border:0.5px solid rgba(232,169,50,0.3);border-radius:20px;padding:4px 14px;font-size:12px;color:var(--gold);margin-bottom:14px}
+.hero h1{font-family:'Syne',sans-serif;font-size:36px;font-weight:700;color:var(--text);line-height:1.15;margin-bottom:8px}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero p{font-size:14px;color:var(--text3);max-width:520px;margin:0 auto}
+
+/* KPI CARDS */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:36px}
+.kpi-card{background:var(--bg2);border:0.5px solid var(--border2);border-radius:var(--r-lg);padding:18px 20px}
+.kpi-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;font-weight:500}
+.kpi-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;color:var(--text);line-height:1}
+.kpi-val.gold{color:var(--gold)}
+.kpi-val.green{color:var(--green)}
+.kpi-val.red{color:var(--red)}
+.kpi-sub{font-size:11px;color:var(--text3);margin-top:5px}
+.kpi-sub.up{color:var(--green)}
+.kpi-sub.down{color:var(--red)}
+
+/* DECISION BANNERS */
+.decision-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:12px}
+.decision-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:24px 20px;text-align:center}
+.decision-card.green{border-top:3px solid var(--green)}
+.decision-card.red{border-top:3px solid var(--red)}
+.decision-type{font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px}
+.decision-card.green .decision-type{color:var(--green)}
+.decision-card.red .decision-type{color:var(--red)}
+.decision-area{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:var(--text);margin-bottom:6px}
+.decision-desc{font-size:13px;color:var(--text2);margin-bottom:10px}
+.decision-badge{display:inline-block;font-size:11px;padding:3px 12px;border-radius:20px}
+.decision-card.green .decision-badge{background:rgba(74,222,128,0.12);border:0.5px solid rgba(74,222,128,0.3);color:var(--green)}
+.decision-card.red .decision-badge{background:rgba(248,113,113,0.12);border:0.5px solid rgba(248,113,113,0.3);color:var(--red)}
+.confidence{text-align:center;margin:10px 0 0}
+.confidence span{display:inline-block;background:var(--bg2);border:0.5px solid var(--border);padding:4px 14px;border-radius:20px;font-size:12px;color:var(--text3)}
+
+/* ALERTS */
+.alert-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.alert-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:16px 18px}
+.alert-card.danger{border-left:3px solid var(--red)}
+.alert-card.warning{border-left:3px solid var(--gold)}
+.alert-type{font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px}
+.alert-card.danger .alert-type{color:var(--red)}
+.alert-card.warning .alert-type{color:var(--gold)}
+.alert-msg{font-size:13.5px;color:var(--text);margin-bottom:4px}
+.alert-time{font-size:11px;color:var(--text3)}
+.premium-note{background:var(--purple-lo);border:0.5px solid rgba(124,58,237,0.25);padding:13px 18px;border-radius:var(--r-md);text-align:center;font-size:13px;color:var(--text3);margin-top:10px}
+.premium-note strong{color:#a78bfa}
+
+/* CHARTS */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:12px}
+.chart-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:20px}
+.chart-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px}
+.chart-sub{font-size:12px;color:var(--text3);margin-bottom:14px}
+.chart-container{width:100%;height:320px}
+.insight{background:var(--bg2);border-left:3px solid var(--purple);padding:12px 16px;border-radius:0 var(--r-md) var(--r-md) 0;font-size:13px;color:var(--text2);margin-top:10px;line-height:1.6}
+.risk{background:var(--bg2);border-left:3px solid var(--red);padding:12px 16px;border-radius:0 var(--r-md) var(--r-md) 0;font-size:13px;color:var(--text2);margin-top:10px;line-height:1.6}
+
+/* GATE CARD */
+.gate-card{background:var(--bg2);border:0.5px solid var(--border2);border-radius:var(--r-xl);padding:48px 32px;text-align:center;margin:16px 0}
+.gate-card-icon{font-size:32px;margin-bottom:12px}
+.gate-card-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px}
+.gate-card-desc{font-size:14px;color:var(--text3);margin-bottom:14px}
+.gate-card-badge{display:inline-block;background:var(--purple-lo);border:0.5px solid rgba(124,58,237,0.3);border-radius:20px;padding:4px 14px;font-size:12px;color:#a78bfa}
+
+/* MAP */
+#map{width:100%;height:500px;border-radius:var(--r-lg);overflow:hidden;border:0.5px solid var(--border)}
+
+/* POSTAL CODE TABLE */
+.postal-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+table th{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;padding:10px 12px;border-bottom:0.5px solid var(--border);text-align:left}
+table td{padding:10px 12px;border-bottom:0.5px solid var(--border);color:var(--text2)}
+table tr:last-child td{border-bottom:none}
+table tr:hover td{background:rgba(124,58,237,0.04)}
+.score-bar-wrap{width:80px;height:5px;background:rgba(140,110,220,0.15);border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:8px}
+.score-bar{height:100%;border-radius:3px}
+.badge-green{display:inline-block;background:rgba(74,222,128,0.12);color:var(--green);border-radius:20px;padding:2px 8px;font-size:11px}
+.badge-red{display:inline-block;background:rgba(248,113,113,0.12);color:var(--red);border-radius:20px;padding:2px 8px;font-size:11px}
+.badge-gold{display:inline-block;background:var(--gold-lo);color:var(--gold);border-radius:20px;padding:2px 8px;font-size:11px}
+
+/* STORE TABLE */
+.filter-row{display:flex;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap}
+.filter-label{font-size:12px;color:var(--text3)}
+.filter-select{background:var(--bg2);border:0.5px solid var(--border2);border-radius:var(--r-md);padding:7px 12px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text2);outline:none;cursor:pointer}
+.filter-select:focus{border-color:var(--purple)}
+.filter-range{display:flex;align-items:center;gap:8px}
+.filter-range input[type=range]{accent-color:var(--purple);width:120px}
+.filter-range span{font-size:13px;color:var(--text);min-width:24px}
+.store-count{font-size:12px;color:var(--text3);margin-left:auto}
+
+/* CTA */
+.cta-box{background:var(--bg3);border:0.5px solid var(--border2);border-radius:var(--r-xl);padding:48px 40px;text-align:center;margin-top:32px}
+.cta-badge{display:inline-flex;align-items:center;gap:7px;background:var(--gold-lo);border:0.5px solid rgba(232,169,50,0.3);border-radius:20px;padding:4px 14px;font-size:12px;color:var(--gold);margin-bottom:14px}
+.cta-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;color:var(--text);margin-bottom:10px;line-height:1.2}
+.cta-sub{font-size:15px;color:var(--text2);max-width:460px;margin:0 auto 22px;line-height:1.7}
+.cta-btn{display:inline-block;background:var(--purple);color:#fff;padding:13px 28px;border-radius:var(--r-md);font-weight:500;font-size:15px;text-decoration:none;transition:background 0.15s}
+.cta-btn:hover{background:var(--purple2)}
+.cta-note{font-size:12px;color:var(--text3);margin-top:14px}
+
+/* LOADING */
+.loading{display:flex;align-items:center;justify-content:center;height:200px;color:var(--text3);font-size:14px;gap:10px}
+.spinner{width:18px;height:18px;border:2px solid var(--border2);border-top-color:var(--purple);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:0 16px}
+  .page{padding:20px 16px 60px}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .decision-grid,.charts-grid,.postal-grid,.alert-grid{grid-template-columns:1fr}
+  .hero h1{font-size:26px}
+  .filter-row{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<!-- ACCESS GATE OVERLAY -->
+<div id="gateOverlay" class="gate-overlay">
+  <div class="gate-box">
+    <div class="gate-logo">Canna<span>IQ</span></div>
+    <p class="gate-sub">Sign in to access your dashboard.</p>
+    <label class="gate-label">Access code</label>
+    <input type="password" class="gate-input" id="codeInput" placeholder="cannaiq-XXXXX" />
+    <div class="gate-error" id="gateError">Invalid access code. Try again or contact hello@cannaiqdata.ca</div>
+    <button class="gate-btn" onclick="submitCode()">Unlock dashboard</button>
+    <div class="gate-divider"><hr><span>don't have an account?</span><hr></div>
+    <p class="gate-trial">
+      <a href="https://buy.stripe.com/4gM28kf5K8Tn3duf4dcEw00" target="_blank">Start your free trial — CA$199/month →</a>
+    </p>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav" style="display:none">
+  <a href="https://cannaiqdata.ca" class="nav-logo">Canna<span>IQ</span></a>
+  <div class="nav-center">
+    <button class="nav-city-btn active" id="btn-calgary" onclick="switchCity('calgary')">Calgary</button>
+    <button class="nav-city-btn" id="btn-edmonton" onclick="switchCity('edmonton')">Edmonton</button>
+  </div>
+  <div class="nav-right">
+    <div class="nav-live">Live data</div>
+    <button class="nav-signout" onclick="signOut()">Sign out</button>
+  </div>
+</nav>
+
+<!-- DASHBOARD -->
+<div class="page" id="dashboard" style="display:none">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">Alberta cannabis market intelligence</div>
+    <h1 id="heroTitle">Know where to open<br><em>before your competitors do.</em></h1>
+    <p id="heroSub">Powered by AGLC license filings, Google Maps signals, and real-time store density data.</p>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Total active stores</div>
+      <div class="kpi-val" id="kpiTotal"><div class="spinner"></div></div>
+      <div class="kpi-sub" id="kpiTotalSub">AGLC registry</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Operational stores</div>
+      <div class="kpi-val gold" id="kpiOp">—</div>
+      <div class="kpi-sub up" id="kpiOpSub">Active right now</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">High competition stores</div>
+      <div class="kpi-val" id="kpiHighComp">—</div>
+      <div class="kpi-sub">200+ reviews</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">New stores (6 months)</div>
+      <div class="kpi-val red" id="kpiNew">—</div>
+      <div class="kpi-sub down">Market heating up</div>
+    </div>
+  </div>
+
+  <!-- DECISION BANNERS -->
+  <div class="section-label">What you should do right now</div>
+  <p class="section-sub" id="decisionSub">Based on competition density and demand gaps — updated daily.</p>
+  <div class="decision-grid">
+    <div class="decision-card green">
+      <div class="decision-type">Best area to open</div>
+      <div class="decision-area" id="bestArea">—</div>
+      <div class="decision-desc" id="bestDesc">Lowest competition right now</div>
+      <span class="decision-badge">#1 Opportunity zone</span>
+    </div>
+    <div class="decision-card red">
+      <div class="decision-type">Avoid these areas</div>
+      <div class="decision-area" id="avoidArea">—</div>
+      <div class="decision-desc" id="avoidDesc">Highest store density — hardest to compete</div>
+      <span class="decision-badge">High risk · avoid entry</span>
+    </div>
+  </div>
+  <div class="confidence">
+    <span>📊 Confidence: Medium — AGLC + Google data</span>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ALERTS -->
+  <div class="section-label">Live market alerts</div>
+  <p class="section-sub">Real-time signals from AGLC license filings and market activity.</p>
+  <div class="alert-grid">
+    <div class="alert-card danger">
+      <div class="alert-type">New license application</div>
+      <div class="alert-msg" id="alert1Msg">New cannabis store application filed</div>
+      <div class="alert-time">2 days ago · AGLC Registry</div>
+    </div>
+    <div class="alert-card warning">
+      <div class="alert-type">Saturation alert</div>
+      <div class="alert-msg" id="alert2Msg">Area reached maximum saturation threshold</div>
+      <div class="alert-time">Updated today · CannaIQ Analysis</div>
+    </div>
+  </div>
+  <div class="premium-note">
+    🔒 <strong>Premium subscribers</strong> get real-time alerts for new license applications, competitor openings, and saturation changes in their target areas.
+  </div>
+
+  <hr class="divider">
+
+  <!-- SATURATION + OPPORTUNITY CHARTS -->
+  <div class="section-label">Market scoring</div>
+  <p class="section-sub">Where to win and where to avoid — based on store density and demand signals.</p>
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">Where not to open</div>
+      <div class="chart-sub">Higher score = more saturated = higher risk</div>
+      <div class="chart-container" id="satChart"></div>
+      <div class="risk" id="satInsight">Loading...</div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Best areas to open</div>
+      <div class="chart-sub">Higher score = lower competition + stronger demand</div>
+      <div class="chart-container" id="oppChart"></div>
+      <div class="insight" id="oppInsight">Loading...</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- COMPETITIVE LANDSCAPE -->
+  <div class="section-label">Competitive landscape</div>
+  <p class="section-sub" id="compSub">Who dominates the market right now — and where the gaps are.</p>
+  <div class="chart-card">
+    <div class="chart-title">Top stores by reviews vs rating</div>
+    <div class="chart-sub">Bubble size = review volume. Green = high rating. Click any store to see details.</div>
+    <div class="chart-container" id="compChart" style="height:380px"></div>
+  </div>
+  <div class="insight" id="compInsight" style="margin-top:10px">Loading...</div>
+
+  <hr class="divider">
+
+  <!-- MAP (always shown for subscribers) -->
+  <div class="section-label">Interactive store map</div>
+  <p class="section-sub" id="mapSub">Every licensed cannabis store — colour coded by performance rating.</p>
+  <div id="map"></div>
+  <div class="insight" style="margin-top:10px">📍 Click any store pin to see name, rating and address. <span style="color:var(--green)">●</span> 4.5+ stars &nbsp; <span style="color:var(--gold)">●</span> 4.0–4.5 stars &nbsp; <span style="color:var(--red)">●</span> Below 4.0</div>
+
+  <hr class="divider">
+
+  <!-- POSTAL CODE ANALYSIS -->
+  <div class="section-label">Street level intelligence</div>
+  <p class="section-sub" id="postalSub">Postal code breakdown — opportunity and saturation at street level.</p>
+  <div class="postal-grid">
+    <div>
+      <div class="chart-title" style="margin-bottom:12px">🎯 Top 10 opportunity zones</div>
+      <div class="table-wrap"><table id="oppTable">
+        <thead><tr><th>Postal area</th><th>Stores</th><th>Avg rating</th><th>Opportunity</th></tr></thead>
+        <tbody id="oppTableBody"><tr><td colspan="4"><div class="loading"><div class="spinner"></div> Loading...</div></td></tr></tbody>
+      </table></div>
+      <div class="insight" id="oppTableInsight" style="margin-top:10px">Loading...</div>
+    </div>
+    <div>
+      <div class="chart-title" style="margin-bottom:12px">⚠️ Most saturated postal codes</div>
+      <div class="table-wrap"><table id="satTable">
+        <thead><tr><th>Postal area</th><th>Stores</th><th>Saturation</th></tr></thead>
+        <tbody id="satTableBody"><tr><td colspan="3"><div class="loading"><div class="spinner"></div> Loading...</div></td></tr></tbody>
+      </table></div>
+      <div class="risk" id="satTableInsight" style="margin-top:10px">Loading...</div>
+    </div>
+  </div>
+  <div class="chart-card" style="margin-top:16px">
+    <div class="chart-title">Top 15 postal areas by opportunity score</div>
+    <div class="chart-container" id="postalChart" style="height:380px"></div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- STORE INTELLIGENCE TABLE -->
+  <div class="section-label">Full store intelligence</div>
+  <p class="section-sub" id="storeSub">Complete store database with ratings, reviews, and business status.</p>
+  <div class="filter-row">
+    <span class="filter-label">Min rating</span>
+    <div class="filter-range">
+      <input type="range" min="0" max="5" step="0.1" value="0" id="ratingSlider" oninput="updateRatingLabel();filterStores()">
+      <span id="ratingLabel">0.0</span>
+    </div>
+    <span class="filter-label" style="margin-left:12px">Status</span>
+    <select class="filter-select" id="statusFilter" onchange="filterStores()">
+      <option value="ALL">All</option>
+      <option value="OPERATIONAL">Operational</option>
+      <option value="CLOSED_PERMANENTLY">Closed</option>
+    </select>
+    <span class="store-count" id="storeCount"></span>
+  </div>
+  <div class="table-wrap">
+    <table id="storeTable">
+      <thead><tr><th>Store name</th><th>Address</th><th>Rating</th><th>Reviews</th><th>Status</th></tr></thead>
+      <tbody id="storeTableBody"><tr><td colspan="5"><div class="loading"><div class="spinner"></div> Loading...</div></td></tr></tbody>
+    </table>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-box">
+    <div class="cta-badge">Early access now open</div>
+    <div class="cta-title">Get full CannaIQ intelligence</div>
+    <p class="cta-sub">Store-level alerts · Neighbourhood forecasts · Competitor tracking · Canada-wide data</p>
+    <a href="https://buy.stripe.com/4gM28kf5K8Tn3duf4dcEw00" target="_blank" class="cta-btn">Upgrade your plan</a>
+    <p class="cta-note">Data sources: AGLC · Health Canada · Google Maps</p>
+  </div>
+
+  <p style="text-align:center;color:#2a1f46;font-size:12px;margin-top:32px">CannaIQ — Cannabis Market Intelligence for Canada · v2.0</p>
+</div>
+
+<script>
+const API = '';
+let currentCity = 'calgary';
+let allStores = [];
+let leafletMap = null;
+
+// ── AUTH ──────────────────────────────────────────────────────
+function init() {
+  const code = localStorage.getItem('ciq_access_code');
+  if (code) {
+    validateAndUnlock(code, false);
+  }
+}
+
+async function submitCode() {
+  const code = document.getElementById('codeInput').value.trim();
+  if (!code) return;
+  await validateAndUnlock(code, true);
+}
+
+async function validateAndUnlock(code, showError) {
+  try {
+    const res = await fetch(`${API}/api/validate?code=${encodeURIComponent(code)}`);
+    const data = await res.json();
+    if (data.valid) {
+      localStorage.setItem('ciq_access_code', code);
+      document.getElementById('gateOverlay').style.display = 'none';
+      document.getElementById('mainNav').style.display = 'flex';
+      document.getElementById('dashboard').style.display = 'block';
+      loadAll(currentCity);
+    } else if (showError) {
+      document.getElementById('gateError').style.display = 'block';
+    }
+  } catch(e) {
+    if (showError) {
+      document.getElementById('gateError').style.display = 'block';
+    }
+  }
+}
+
+function signOut() {
+  localStorage.removeItem('ciq_access_code');
+  location.reload();
+}
+
+document.getElementById('codeInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') submitCode();
+});
+
+// ── CITY SWITCH ───────────────────────────────────────────────
+function switchCity(city) {
+  if (city === currentCity) return;
+  currentCity = city;
+  document.getElementById('btn-calgary').classList.toggle('active', city === 'calgary');
+  document.getElementById('btn-edmonton').classList.toggle('active', city === 'edmonton');
+  if (leafletMap) { leafletMap.remove(); leafletMap = null; }
+  loadAll(city);
+}
+
+// ── LOAD ALL ──────────────────────────────────────────────────
+async function loadAll(city) {
+  await Promise.all([
+    loadSummary(city),
+    loadSaturation(city),
+    loadCompetitive(city),
+    loadGeocoded(city),
+    loadPostal(city),
+    loadStores(city),
+  ]);
+}
+
+// ── SUMMARY ───────────────────────────────────────────────────
+async function loadSummary(city) {
+  const d = await apiFetch(`/api/summary?city=${city}`);
+  if (!d) return;
+  document.getElementById('kpiTotal').textContent = d.total_stores;
+  document.getElementById('kpiOp').textContent = d.operational_stores;
+  document.getElementById('kpiHighComp').textContent = d.high_competition_stores;
+  document.getElementById('kpiNew').textContent = d.new_stores;
+  document.getElementById('bestArea').textContent = d.best_area;
+  document.getElementById('avoidArea').textContent = d.avoid_area;
+  document.getElementById('bestDesc').textContent = `Lowest competition in ${d.best_area} right now`;
+  document.getElementById('avoidDesc').textContent = `Highest store density in ${d.avoid_area} — hardest to compete`;
+  document.getElementById('alert1Msg').textContent = `New cannabis store application filed in ${d.city_label}`;
+  document.getElementById('alert2Msg').textContent = `${d.avoid_area} reached maximum saturation threshold`;
+  document.getElementById('decisionSub').textContent = `Based on competition density and demand gaps in ${d.city_label} — updated daily.`;
+  document.getElementById('compSub').textContent = `Who dominates ${d.city_label} right now — and where the gaps are.`;
+  document.getElementById('mapSub').textContent = `Every licensed cannabis store in ${d.city_label} — colour coded by performance rating.`;
+  document.getElementById('postalSub').textContent = `Postal code breakdown — opportunity and saturation at street level in ${d.city_label}.`;
+  document.getElementById('storeSub').textContent = `Complete database of all ${d.total_stores} ${d.city_label} cannabis stores.`;
+}
+
+// ── SATURATION CHARTS ─────────────────────────────────────────
+async function loadSaturation(city) {
+  const d = await apiFetch(`/api/saturation?city=${city}`);
+  if (!d) return;
+  const rows = d.data;
+  const satSorted = [...rows].sort((a,b) => a.saturation_score - b.saturation_score);
+  const oppSorted = [...rows].sort((a,b) => a.opportunity_score - b.opportunity_score);
+
+  const plotConfig = {displayModeBar: false, responsive: true};
+  const plotLayout = (axis) => ({
+    paper_bgcolor:'rgba(0,0,0,0)', plot_bgcolor:'rgba(0,0,0,0)',
+    font:{family:'DM Sans, sans-serif', color:'#b8a8d8', size:12},
+    margin:{l:10,r:10,t:10,b:10},
+    xaxis:{gridcolor:'rgba(140,110,220,0.08)', zerolinecolor:'rgba(140,110,220,0.1)', color:'#7a6a9a', title:{text:axis, font:{color:'#7a6a9a', size:11}}},
+    yaxis:{gridcolor:'rgba(140,110,220,0.08)', color:'#7a6a9a', automargin:true},
+    coloraxis:{showscale:false},
+    hoverlabel:{bgcolor:'#1a1333', bordercolor:'rgba(140,110,220,0.4)', font:{family:'DM Sans',color:'#f0eaff'}},
+  });
+
+  Plotly.newPlot('satChart', [{
+    type:'bar', orientation:'h',
+    x: satSorted.map(r => r.saturation_score),
+    y: satSorted.map(r => r.neighbourhood),
+    marker:{color: satSorted.map(r => r.saturation_score), colorscale:[[0,'#4ade80'],[0.5,'#e8a932'],[1,'#f87171']], showscale:false},
+    hovertemplate:'<b>%{y}</b><br>Saturation: %{x:.1f}<extra></extra>',
+  }], plotLayout('Saturation score'), plotConfig);
+
+  Plotly.newPlot('oppChart', [{
+    type:'bar', orientation:'h',
+    x: oppSorted.map(r => r.opportunity_score),
+    y: oppSorted.map(r => r.neighbourhood),
+    marker:{color: oppSorted.map(r => r.opportunity_score), colorscale:[[0,'#f87171'],[0.5,'#e8a932'],[1,'#4ade80']], showscale:false},
+    hovertemplate:'<b>%{y}</b><br>Opportunity: %{x:.1f}<extra></extra>',
+  }], plotLayout('Opportunity score'), plotConfig);
+
+  const topOpp = oppSorted[oppSorted.length - 1];
+  const topSat = satSorted[satSorted.length - 1];
+  document.getElementById('oppInsight').textContent = `✅ ${topOpp?.neighbourhood} = highest opportunity score. Low saturation, underserved market.`;
+  document.getElementById('satInsight').textContent = `⚠️ ${topSat?.neighbourhood} has the highest competition density — expect lower margins.`;
+}
+
+// ── COMPETITIVE CHART ─────────────────────────────────────────
+async function loadCompetitive(city) {
+  const d = await apiFetch(`/api/competitive?city=${city}`);
+  if (!d) return;
+  const stores = d.top_stores;
+  Plotly.newPlot('compChart', [{
+    type:'scatter', mode:'markers',
+    x: stores.map(s => s.review_count),
+    y: stores.map(s => s.rating),
+    text: stores.map(s => s['Establishment Name']),
+    marker:{
+      size: stores.map(s => Math.max(10, Math.sqrt(s.review_count) * 2)),
+      color: stores.map(s => s.rating),
+      colorscale:[[0,'#f87171'],[0.5,'#e8a932'],[1,'#4ade80']],
+      showscale:false,
+      opacity:0.85,
+    },
+    hovertemplate:'<b>%{text}</b><br>Reviews: %{x}<br>Rating: %{y}<extra></extra>',
+  }], {
+    paper_bgcolor:'rgba(0,0,0,0)', plot_bgcolor:'rgba(0,0,0,0)',
+    font:{family:'DM Sans, sans-serif', color:'#b8a8d8', size:12},
+    margin:{l:40,r:20,t:10,b:40},
+    xaxis:{gridcolor:'rgba(140,110,220,0.08)', zerolinecolor:'rgba(140,110,220,0.1)', color:'#7a6a9a', title:{text:'Number of reviews', font:{color:'#7a6a9a', size:11}}},
+    yaxis:{gridcolor:'rgba(140,110,220,0.08)', color:'#7a6a9a', title:{text:'Google rating', font:{color:'#7a6a9a', size:11}}, range:[3.5,5.1]},
+    hoverlabel:{bgcolor:'#1a1333', bordercolor:'rgba(140,110,220,0.4)', font:{family:'DM Sans',color:'#f0eaff'}},
+  }, {displayModeBar:false, responsive:true});
+
+  const l = d.market_leader;
+  document.getElementById('compInsight').textContent = `${l.name} leads with ${l.reviews} reviews and a ${l.rating} rating — the benchmark every operator is competing against.`;
+}
+
+// ── MAP ───────────────────────────────────────────────────────
+async function loadGeocoded(city) {
+  const d = await apiFetch(`/api/geocoded?city=${city}`);
+  if (!d) return;
+  const center = city === 'calgary' ? [51.0447, -114.0719] : [53.5461, -113.4938];
+  if (leafletMap) { leafletMap.remove(); leafletMap = null; }
+  leafletMap = L.map('map').setView(center, 11);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution:'© OpenStreetMap © CARTO', maxZoom:19
+  }).addTo(leafletMap);
+  d.data.forEach(store => {
+    const rating = store.rating || 0;
+    const color = rating >= 4.5 ? '#4ade80' : rating >= 4.0 ? '#e8a932' : '#f87171';
+    L.circleMarker([store.lat, store.lng], {
+      radius:7, color:color, fillColor:color, fillOpacity:0.85, weight:1.5
+    }).bindPopup(`
+      <div style="font-family:'DM Sans',sans-serif; min-width:160px">
+        <div style="font-weight:600; color:#1a1333; margin-bottom:4px">${store['Establishment Name'] || 'Store'}</div>
+        <div style="font-size:12px; color:#444">⭐ ${rating || 'N/A'} · ${store.review_count || 0} reviews</div>
+        <div style="font-size:11px; color:#666; margin-top:3px">${store['Site Address Line 1'] || ''}</div>
+      </div>
+    `).addTo(leafletMap);
+  });
+}
+
+// ── POSTAL ────────────────────────────────────────────────────
+async function loadPostal(city) {
+  const d = await apiFetch(`/api/postal?city=${city}`);
+  if (!d) return;
+
+  const oppBody = document.getElementById('oppTableBody');
+  oppBody.innerHTML = d.top_opportunity.map(r => `
+    <tr>
+      <td><strong style="color:var(--text)">${r.fsa}</strong></td>
+      <td>${r.store_count}</td>
+      <td>${r.avg_rating ? r.avg_rating.toFixed(1) : '—'}</td>
+      <td>
+        <div class="score-bar-wrap"><div class="score-bar" style="width:${r.opportunity_score}%;background:var(--green)"></div></div>
+        <span class="badge-green">${r.opportunity_score ? r.opportunity_score.toFixed(0) : '—'}</span>
+      </td>
+    </tr>`).join('');
+
+  const satBody = document.getElementById('satTableBody');
+  satBody.innerHTML = d.top_saturated.map(r => `
+    <tr>
+      <td><strong style="color:var(--text)">${r.fsa}</strong></td>
+      <td>${r.store_count}</td>
+      <td>
+        <div class="score-bar-wrap"><div class="score-bar" style="width:${r.saturation_score}%;background:var(--red)"></div></div>
+        <span class="badge-red">${r.saturation_score ? r.saturation_score.toFixed(0) : '—'}</span>
+      </td>
+    </tr>`).join('');
+
+  const topOpp = d.top_opportunity[0];
+  const topSat = d.top_saturated[0];
+  document.getElementById('oppTableInsight').textContent = `✅ ${topOpp?.fsa} has the lowest competition and strongest entry opportunity right now.`;
+  document.getElementById('satTableInsight').textContent = `⚠️ ${topSat?.fsa} is the most overcrowded postal code — maximum competition pressure.`;
+
+  Plotly.newPlot('postalChart', [{
+    type:'bar', orientation:'h',
+    x: d.chart_data.map(r => r.opportunity_score),
+    y: d.chart_data.map(r => r.fsa),
+    marker:{color: d.chart_data.map(r => r.opportunity_score), colorscale:[[0,'#f87171'],[0.5,'#e8a932'],[1,'#4ade80']], showscale:false},
+    hovertemplate:'<b>%{y}</b><br>Opportunity: %{x:.1f}<extra></extra>',
+  }], {
+    paper_bgcolor:'rgba(0,0,0,0)', plot_bgcolor:'rgba(0,0,0,0)',
+    font:{family:'DM Sans, sans-serif', color:'#b8a8d8', size:12},
+    margin:{l:10,r:20,t:10,b:40},
+    xaxis:{gridcolor:'rgba(140,110,220,0.08)', zerolinecolor:'rgba(140,110,220,0.1)', color:'#7a6a9a', title:{text:'Opportunity score',font:{color:'#7a6a9a',size:11}}},
+    yaxis:{gridcolor:'rgba(140,110,220,0.08)', color:'#7a6a9a', automargin:true},
+    coloraxis:{showscale:false},
+    hoverlabel:{bgcolor:'#1a1333', bordercolor:'rgba(140,110,220,0.4)', font:{family:'DM Sans',color:'#f0eaff'}},
+  }, {displayModeBar:false, responsive:true});
+}
+
+// ── STORES ────────────────────────────────────────────────────
+async function loadStores(city) {
+  const d = await apiFetch(`/api/stores?city=${city}`);
+  if (!d) return;
+  allStores = d.data;
+  renderStores();
+}
+
+function renderStores() {
+  const minRating = parseFloat(document.getElementById('ratingSlider').value);
+  const status = document.getElementById('statusFilter').value;
+  let filtered = allStores.filter(s => (s.rating || 0) >= minRating);
+  if (status !== 'ALL') filtered = filtered.filter(s => s.business_status === status);
+  document.getElementById('storeCount').textContent = `${filtered.length} stores`;
+  const tbody = document.getElementById('storeTableBody');
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:24px">No stores match your filters.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = filtered.map(s => `
+    <tr>
+      <td><strong style="color:var(--text)">${s['Establishment Name'] || '—'}</strong></td>
+      <td style="color:var(--text3);font-size:12px">${s.Address || '—'}</td>
+      <td>${s.rating ? `<span class="badge-${s.rating >= 4.5 ? 'green' : s.rating >= 4.0 ? 'gold' : 'red'}">${s.rating}</span>` : '—'}</td>
+      <td>${s.review_count ? s.review_count.toLocaleString() : '—'}</td>
+      <td><span class="badge-${s.business_status === 'OPERATIONAL' ? 'green' : 'red'}" style="font-size:10px">${s.business_status || '—'}</span></td>
+    </tr>`).join('');
+}
+
+function filterStores() { renderStores(); }
+function updateRatingLabel() {
+  const v = parseFloat(document.getElementById('ratingSlider').value).toFixed(1);
+  document.getElementById('ratingLabel').textContent = v;
+}
+
+// ── API FETCH ─────────────────────────────────────────────────
+async function apiFetch(path) {
+  try {
+    const res = await fetch(API + path);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch(e) {
+    console.error('API error:', path, e);
+    return null;
+  }
+}
+
+// ── BOOT ──────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
