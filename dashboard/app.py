@@ -43,8 +43,13 @@ html, body, [class*="css"] {
 .stApp > header { background-color: var(--bg) !important; }
 .main { background-color: var(--bg) !important; }
 [data-testid="stAppViewContainer"] { background-color: var(--bg) !important; }
-[data-testid="stHeader"] { background-color: var(--bg) !important; }
-.main .block-container { max-width: 1100px !important; padding: 2rem 2.5rem !important; margin: 0 auto !important; }
+[data-testid="stHeader"] { background-color: var(--bg) !important; background: var(--bg) !important; }
+[data-testid="stSidebar"] { background-color: var(--bg) !important; }
+.main .block-container {
+  max-width: 1100px !important;
+  padding: 1rem 2.5rem 3rem !important;
+  margin: 0 auto !important;
+}
 
 p, label, span, div { color: var(--text2) !important; }
 .stMarkdown p { color: var(--text2) !important; }
@@ -59,12 +64,40 @@ footer {visibility: hidden;}
 header {visibility: hidden;}
 .stDeployButton {display: none;}
 [data-testid="stToolbar"] {display: none;}
+[data-testid="stDecoration"] {display: none;}
+section[data-testid="stSidebar"] {display: none;}
 
 h1, h2, h3 {
   font-family: 'Syne', sans-serif !important;
   color: var(--text) !important;
   font-weight: 700 !important;
   letter-spacing: -0.3px !important;
+}
+
+/* Radio buttons — purple */
+[data-testid="stRadio"] label {
+  color: var(--text2) !important;
+  font-size: 13px !important;
+}
+[data-testid="stRadio"] div[role="radiogroup"] {
+  gap: 12px !important;
+}
+[data-testid="stRadio"] [data-baseweb="radio"] div:first-child {
+  border-color: var(--border2) !important;
+  background: var(--bg2) !important;
+}
+[data-testid="stRadio"] [aria-checked="true"] [data-baseweb="radio"] div:first-child,
+[data-testid="stRadio"] input:checked + div div:first-child {
+  border-color: var(--purple) !important;
+  background: var(--purple) !important;
+}
+div[data-baseweb="radio"] > div:first-child {
+  border-color: rgba(140,110,220,0.4) !important;
+  background-color: transparent !important;
+}
+div[data-baseweb="radio"][aria-checked="true"] > div:first-child {
+  border-color: var(--purple) !important;
+  background-color: var(--purple) !important;
 }
 
 [data-testid="metric-container"] {
@@ -131,14 +164,16 @@ h1, h2, h3 {
   border-radius: 10px !important;
 }
 
-hr { border-color: var(--border) !important; margin: 28px 0 !important; }
-
-div[data-baseweb="radio"] label { color: var(--text2) !important; }
-div[data-baseweb="radio"] [data-checked="true"] { border-color: var(--purple) !important; }
-
-[data-testid="stSlider"] [data-baseweb="slider"] div[role="slider"] {
+/* Slider purple thumb */
+[data-testid="stSlider"] [data-baseweb="slider"] [role="slider"] {
+  background: var(--purple) !important;
+  border-color: var(--purple) !important;
+}
+[data-testid="stSlider"] [data-baseweb="slider"] div[class*="Track"] div:first-child {
   background: var(--purple) !important;
 }
+
+hr { border-color: var(--border) !important; margin: 28px 0 !important; }
 
 @media (max-width: 768px) {
   .main .block-container { padding: 1rem !important; }
